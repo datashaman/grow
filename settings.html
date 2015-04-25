@@ -1,0 +1,18 @@
+---
+layout: default
+title: Settings
+---
+
+<header class="bar bar-nav">
+    <a href="{{ "/index.html" | prepend: site.baseurl }}" class="icon icon-left-nav pull-left"></a>
+    <h1 class="title">{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1>
+</header>
+
+<div class="content content-padded">
+    <form>
+        <input id="table_url" type="text" placeholder="Fusion Table URL" />
+        <input id="api_key" type="text" placeholder="Google API Key" />
+        <button class="btn btn-positive btn-block">Save</button>
+    </form>
+</div>
+
