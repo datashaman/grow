@@ -13,15 +13,27 @@ function refreshDisplay() {
     $.getJSON('https://www.googleapis.com/fusiontables/v1/query', {
         sql: 'select Name, ' + month + ', Type FROM ' + data.tables.schedule + ' WHERE Climate = \'' + settings.climate + '\' AND ' + month + ' NOT EQUAL TO \'\' ORDER BY Name',
         key: google_api_key
-    }, function(response) {
-        var plants = _.map(response.rows, function(row) {
-            return '<li class="list-group-item">' +
-                '<span class="pull-right">' + data.instructions[row[1]] + '</span>' +
-                '<span class="glyphicon glyphicon-' + data.glyphicons[row[2]] + '" aria-hidden="true"></span>' +
-                row[0] +
-            '</li>';
-        }).join('');
-        $('#plants').html(plants);
+    }, function(scheduleResponse) {
+        $.getJSON('https://www.googleapis.com/fusiontables/v1/query', {
+            sql: 'select Name, Wikipedia FROM ' + data.tables.plants + ' ORDER BY Name',
+            key: google_api_key
+        }, function(plantsResponse) {
+            var plants = _.map(scheduleResponse.rows, function(schedule) {
+                var name = schedule[0];
+                var plant = _.find(plantsResponse.rows, function(plant) {
+                    return plant[0] == name;
+                });
+                var wikipedia = plant ? plant[1] : null;
+
+                return '<li class="list-group-item">' +
+                    (wikipedia ? '<a target="_blank" class="wikipedia" href="' + wikipedia + '"><span class="glyphicon glyphicon-info-sign pull-right"></span></a>' : '') +
+                    '<span class="instruction pull-right">' + data.instructions[schedule[1]] + '</span>' +
+                    '<span class="glyphicon glyphicon-' + data.glyphicons[schedule[2]] + '" aria-hidden="true"></span>' +
+                    schedule[0] +
+                '</li>';
+            }).join('');
+            $('#plants').html(plants);
+        });
     });
 }
 

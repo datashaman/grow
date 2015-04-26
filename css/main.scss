@@ -6,12 +6,19 @@
 }
 
 .glyphicon {
-    margin-top: 5px;
-    margin-right: 10px;
+    margin: 10px;
 }
 
 @-moz-document url-prefix() {
     fieldset {
         display: table-cell;
     }
+}
+
+.wikipedia {
+    margin-left: 10px;
+}
+
+.instruction {
+    margin-top: 9px;
 }
