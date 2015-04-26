@@ -12,7 +12,13 @@ function refreshDisplay() {
     var filters = [];
 
     if(settings.types) {
-        if(settings.types.length < data.types.length) {
+        if(settings.types.length === 0) {
+            // If no types selected, no rows returned
+            filters = ['1 = 0'];
+        } else if(settings.types.length == data.types.length) {
+            // If all types selected, all rows returned (no filter)
+        } else {
+            // Filter one or the other type
             filters = _.map(settings.types, function(type) {
                 return 'Type = \'' + type + '\'';
             });
@@ -64,7 +70,7 @@ function refreshDisplay() {
 var month;
 
 jQuery(document).ready(function($) {
-    if (!store.has('types')) {
+    if (true || !store.has('types')) {
         store('types', data.types);
     }
 
