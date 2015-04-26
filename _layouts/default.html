@@ -59,8 +59,12 @@
     <script src="{{ "/bower_components/lodash/lodash.js" | prepend: site.baseurl }}"></script>
     <script src="{{ "/bower_components/store/dist/store2.js" | prepend: site.baseurl }}"></script>
 
+    <script src="{{ "/js/main.js" | prepend: site.baseurl }}"></script>
+
     <script>
-    var baseurl = '{{ site.baseurl }}';
+    var google_api_key = {{ site.google_api_key | jsonify }};
+    var baseurl = {{ site.baseurl | jsonify }};
+    var data = {{ site.data | jsonify }};
     </script>
 </body>
 

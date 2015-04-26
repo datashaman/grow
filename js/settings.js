@@ -25,9 +25,6 @@ function initListGroup(tableView, input, key, def) {
 }
 
 jQuery(document).ready(function($) {
-    $('#table_id').val(store('table_id'));
-    $('#api_key').val(store('api_key'));
-
     initListGroup('#select-climate', '#climate', 'climate', 'Dry Summer - Wet Winter');
 
     $('#settings').submit(function() {

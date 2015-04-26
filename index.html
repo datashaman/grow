@@ -5,18 +5,9 @@ layout: default
 
 <div class="container">
     <div class="months row">
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Jan</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Feb</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Mar</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Apr</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">May</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Jun</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Jul</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Aug</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Sep</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Oct</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Nov</button>
-        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Dec</button>
+        {% for month in site.data.months %}
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">{{ month }}</button>
+        {% endfor %}
     </div>
 
     <ul id="plants" class="list-group">
