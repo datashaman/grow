@@ -3,16 +3,31 @@ layout: default
 title: Settings
 ---
 
-<header class="bar bar-nav">
-    <a href="{{ "/index.html" | prepend: site.baseurl }}" class="icon icon-left-nav pull-left"></a>
-    <h1 class="title">{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1>
-</header>
+<div class="container">
+    <form id="settings">
+        <input id="climate" name="climate" type="hidden" />
 
-<div class="content content-padded">
-    <form>
-        <input id="table_url" type="text" placeholder="Fusion Table URL" />
-        <input id="api_key" type="text" placeholder="Google API Key" />
-        <button class="btn btn-positive btn-block">Save</button>
+        <div class="form-group">
+            <label for="table_id">Fusion Table ID</label>
+            <input id="table_id" class="form-control" name="table_id" type="text" placeholder="Fusion Table ID" />
+        </div>
+
+        <div class="form-group">
+            <label for="api_key">Google API Key</label>
+            <input id="api_key" class="form-control" name="api_key" type="text" placeholder="Google API Key" />
+        </div>
+
+        <div class="form-group">
+            <label for="select-climate">Select Climate</label>
+
+            <ul id="select-climate" class="list-group">
+                <li class="list-group-item">Dry Summer - Wet Winter</li>
+                <li class="list-group-item">Wet Summer - Dry Winter</li>
+            </ul>
+        </div>
+
+        <button type="submit" class="btn btn-default">Save</button>
     </form>
 </div>
 
+<script src="{{ "/js/settings.js" | prepend: site.baseurl }}"></script>

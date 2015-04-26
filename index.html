@@ -1,13 +1,26 @@
 ---
-title: Grow
+title: Home
 layout: default
 ---
 
-<header class="bar bar-nav">
-    <a href="{{ "/settings.html" | prepend: site.baseurl }}" class="icon icon-more-vertical pull-right"></a>
-    <h1 class="title">{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1>
-</header>
+<div class="container">
+    <div class="months row">
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Jan</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Feb</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Mar</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Apr</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">May</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Jun</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Jul</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Aug</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Sep</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Oct</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Nov</button>
+        <button type="button" class="col-xs-2 col-md-1 btn btn-default">Dec</button>
+    </div>
 
-<div class="content content-padded">
-    Setup your Google Fusion Table URL and Google API Key in the settings top-right.
+    <ul id="plants" class="list-group">
+    </ul>
 </div>
+
+<script src="{{ "/js/home.js" | prepend: site.baseurl }}"></script>

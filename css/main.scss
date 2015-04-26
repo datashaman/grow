@@ -1,5 +1,26 @@
 ---
-# Only the main Sass file needs front matter (the dashes are enough)
+# Front matter must be here to work
 ---
-@charset "utf-8";
-@import "ratchet/sass/ratchet";
+body {
+    padding-top: 60px;
+}
+
+.months {
+    margin-bottom: 10px;
+}
+
+#plants .glyphicon {
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+@-moz-document url-prefix() {
+    fieldset {
+        display: table-cell;
+    }
+}
+
+.table-view-cell.active {
+    color: #fff;
+    background-color: blue;
+}

@@ -13,7 +13,10 @@
     "tests"
   ],
   "dependencies": {
-    "zepto": "~1.1.6",
-    "ratchet": "~2.0.2"
+    "store": "~2.2.0",
+    "lodash": "~3.7.0",
+    "bootstrap": "~3.3.4",
+    "html5shiv": "~3.7.2",
+    "respond": "~1.4.2"
   }
 }
