@@ -34,8 +34,6 @@ function refreshDisplay() {
 
     var sql = 'select Name, ' + month + ', Type FROM ' + data.tables.schedule + ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name';
 
-    console.log(sql);
-
     $.getJSON('https://www.googleapis.com/fusiontables/v1/query', {
         sql: sql,
         key: google_api_key
