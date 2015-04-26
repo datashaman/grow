@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui" />
+
+    <title>Settings</title>
+
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+
+    <!--[if lt IE 9]>
+        <script src="/bower_components/html5shiv/dist/html5shiv.js"></script>
+        <script src="/bower_components/respond/dest/respond.src.js"></script>
+    <![endif]-->
+
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+" />
+
+    <link rel="canonical" href="http://yourdomain.com/settings.html" />
+    <link rel="alternate" type="application/rss+xml" title="Grow" href="http://yourdomain.com/feed.xml" />
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Grow</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    
+                    
+                    <li><a href="/feed.xml"></a></li>
+                    
+                    
+                    
+                    <li><a href="/index.html">Home</a></li>
+                    
+                    
+                    
+                    <li><a href="/css/main.css"></a></li>
+                    
+                    
+                    
+                    <li class="active"><a href="/settings.html">Settings</a></li>
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+    <form id="settings">
+        <input id="climate" name="climate" type="hidden" />
+
+        <div class="form-group">
+            <label for="table_id">Fusion Table ID</label>
+            <input id="table_id" class="form-control" name="table_id" type="text" placeholder="Fusion Table ID" />
+        </div>
+
+        <div class="form-group">
+            <label for="api_key">Google API Key</label>
+            <input id="api_key" class="form-control" name="api_key" type="text" placeholder="Google API Key" />
+        </div>
+
+        <div class="form-group">
+            <label for="select-climate">Select Climate</label>
+
+            <ul id="select-climate" class="list-group">
+                <li class="list-group-item">Dry Summer - Wet Winter</li>
+                <li class="list-group-item">Wet Summer - Dry Winter</li>
+            </ul>
+        </div>
+
+        <button type="submit" class="btn btn-default">Save</button>
+    </form>
+</div>
+
+<script src="/js/settings.js"></script>
+
+
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/bower_components/lodash/lodash.js"></script>
+    <script src="/bower_components/store/dist/store2.js"></script>
+</body>
+
+</html>
