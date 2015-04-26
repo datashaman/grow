@@ -6,11 +6,11 @@ layout: default
 <div class="page-header">
     <div class="container">
         <h2 class="invisible climate">Climate</h2>
-        <ul class="list-inline">
+        <div id="types" class="btn-group" role="toolbar" aria-label="plant types">
             {% for item in site.data.glyphicons %}
-            <li><span class="glyphicon glyphicon-{{ item[1] }}"></span>{{ item[0] }}</li>
+            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-{{ item[1] }}"></span><span class="type">{{ item[0] }}</span></button>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 </div>
 

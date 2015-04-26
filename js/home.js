@@ -9,9 +9,35 @@ function refreshDisplay() {
     });
 
     var settings = store();
+    var filters = [];
+
+    if(settings.types) {
+        if(settings.types.length < data.types.length) {
+            filters = _.map(settings.types, function(type) {
+                return 'Type = \'' + type + '\'';
+            });
+        }
+
+        $('#types button').removeClass('active');
+
+        $('#types button').each(function() {
+            var type = $('.type', this).html();
+            var pos = settings.types.indexOf(type);
+            if(pos !== -1) {
+                $(this).addClass('active');
+            }
+        });
+    }
+
+    filters.push('Climate = \'' + settings.climate + '\'');
+    filters.push(month + ' NOT EQUAL TO \'\'');
+
+    var sql = 'select Name, ' + month + ', Type FROM ' + data.tables.schedule + ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name';
+
+    console.log(sql);
 
     $.getJSON('https://www.googleapis.com/fusiontables/v1/query', {
-        sql: 'select Name, ' + month + ', Type FROM ' + data.tables.schedule + ' WHERE Climate = \'' + settings.climate + '\' AND ' + month + ' NOT EQUAL TO \'\' ORDER BY Name',
+        sql: sql,
         key: google_api_key
     }, function(scheduleResponse) {
         $.getJSON('https://www.googleapis.com/fusiontables/v1/query', {
@@ -40,6 +66,10 @@ function refreshDisplay() {
 var month;
 
 jQuery(document).ready(function($) {
+    if (!store.has('types')) {
+        store('types', data.types);
+    }
+
     if (typeof month == 'undefined') {
         var today = new Date();
         month = data.months[today.getMonth()];
@@ -47,6 +77,19 @@ jQuery(document).ready(function($) {
 
     $('.months button').click(function() {
         month = $(this).html();
+        refreshDisplay();
+    });
+
+    $('#types button').click(function() {
+        var type = $('.type', this).html();
+        var types = store('types');
+        var pos = types.indexOf(type);
+        if (pos === -1) {
+            types.push(type);
+        } else {
+            types.splice(pos, 1);
+        }
+        store('types', types);
         refreshDisplay();
     });
 
