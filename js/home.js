@@ -70,7 +70,7 @@ function refreshDisplay() {
 var month;
 
 jQuery(document).ready(function($) {
-    if (true || !store.has('types')) {
+    if (!store.has('types')) {
         store('types', data.types);
     }
 
