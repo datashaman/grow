@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
             return [ element.name, element.value ];
         }));
         store(values);
-        window.location.href = '/';
+        window.location.href = baseurl + '/';
         return false;
     });
 });
