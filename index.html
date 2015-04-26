@@ -3,7 +3,19 @@ title: Home
 layout: default
 ---
 
+<div class="page-header">
+    <div class="container">
+        <h2 class="invisible climate">Climate</h2>
+        <ul class="list-inline">
+            {% for item in site.data.glyphicons %}
+            <li><span class="glyphicon glyphicon-{{ item[1] }}"></span>{{ item[0] }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
 <div class="container">
+
     <div class="months row">
         {% for month in site.data.months %}
         <button type="button" class="col-xs-2 col-md-1 btn btn-default">{{ month }}</button>

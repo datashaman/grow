@@ -38,5 +38,7 @@ jQuery(document).ready(function($) {
         refreshDisplay();
     });
 
+    $('.page-header .climate').html(store('climate')).removeClass('invisible');
+
     refreshDisplay();
 });
