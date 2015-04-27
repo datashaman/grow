@@ -17,19 +17,19 @@
     <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}" />
 
     <!--[if lt IE 9]>
-        {% if site.serving %}
-        <script src="{{ "/bower_components/html5shiv/dist/html5shiv.js" | prepend: site.baseurl }}"></script>
-        <script src="{{ "/bower_components/respond/dest/respond.src.js" | prepend: site.baseurl }}"></script>
-        {% else %}
-        <script src="{{ "/bower_components/html5shiv/dist/html5shiv.min.js" | prepend: site.baseurl }}"></script>
-        <script src="{{ "/bower_components/respond/dest/respond.min.js" | prepend: site.baseurl }}"></script>
-        {% endif %}
+    {% if site.serving %}
+    <script src="{{ "/bower_components/html5shiv/dist/html5shiv.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/respond/dest/respond.src.js" | prepend: site.baseurl }}"></script>
+    {% else %}
+    <script src="{{ "/bower_components/html5shiv/dist/html5shiv.min.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/respond/dest/respond.min.js" | prepend: site.baseurl }}"></script>
+    {% endif %}
     <![endif]-->
 
     {% if site.serving %}
-      <script src="{{ "/bower_components/jquery/dist/jquery.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/jquery/dist/jquery.js" | prepend: site.baseurl }}"></script>
     {% else %}
-      <script src="{{ "/bower_components/jquery/dist/jquery.min.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/jquery/dist/jquery.min.js" | prepend: site.baseurl }}"></script>
     {% endif %}
 
 

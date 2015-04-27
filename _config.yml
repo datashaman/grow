@@ -13,4 +13,13 @@ google_api_key: AIzaSyBUE58hcq5yxNE_-tL-YCGPdfZ39mYgKTw
 
 # Build settings
 markdown: kramdown
-exclude: ["Makefile", "Gemfile*", "bower.json", "jsx"]
+exclude:
+  - Gemfile*
+  - Makefile
+  - bower.json
+  - cjsx
+  - gulpfile
+  - js/.module-cache
+  - node_modules
+  - package.json
+  - sass
