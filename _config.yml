@@ -16,10 +16,9 @@ markdown: kramdown
 exclude:
   - Gemfile*
   - Makefile
+  - assets
   - bower.json
-  - cjsx
   - gulpfile
   - js/.module-cache
   - node_modules
   - package.json
-  - sass

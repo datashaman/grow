@@ -8,7 +8,7 @@ cjsx = require('gulp-cjsx')
 sass = require('gulp-sass')
 
 gulp.task 'cjsx', ->
-  gulp.src [ 'cjsx/**/*.cjsx' ]
+  gulp.src [ 'assets/scripts/**/*.cjsx' ]
     .pipe sourcemaps.init()
     .pipe cjsx
       harmony: true
@@ -16,20 +16,20 @@ gulp.task 'cjsx', ->
     .pipe jshint '.jshintrc'
     .pipe jshint.reporter 'default'
     .pipe sourcemaps.write('.')
-    .pipe gulp.dest 'js'
+    .pipe gulp.dest 'scripts'
     .on 'error', gutil.log
 
 gulp.task 'sass', ->
-  gulp.src [ 'sass/*.{sass,scss}' ]
+  gulp.src [ 'assets/styles/*.{sass,scss}' ]
     .pipe sourcemaps.init()
     .pipe sass()
     .pipe sourcemaps.write()
-    .pipe gulp.dest 'css'
+    .pipe gulp.dest 'styles'
     .on 'error', gutil.log
 
 gulp.task 'watch', ['default'], ->
-  gulp.watch 'cjsx/**/*.cjsx', ['cjsx']
-  gulp.watch 'sass/**/*.{sass,scss}', ['sass']
+  gulp.watch 'assets/scripts/**/*.cjsx', ['cjsx']
+  gulp.watch 'assets/styles/**/*.{sass,scss}', ['sass']
 
 gulp.task 'scripts', ['cjsx']
 
