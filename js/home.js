@@ -15,8 +15,10 @@ window.jQuery(document).ready(function($) {
       if (this.state.fetching) {
         this.state.spinner = new Spinner().spin(document.getElementById('plants'));
       } else {
-        this.state.spinner.stop();
-        this.state.spinner = null;
+        if (this.state.spinner) {
+          this.state.spinner.stop();
+          this.state.spinner = null;
+        }
       }
     },
     componentWillUnmount: function() {
@@ -37,29 +39,25 @@ window.jQuery(document).ready(function($) {
         spinner: null
       };
     },
-    handleTypeClick: function(e) {
-      var $btn;
+    handleTypeClick: function(type) {
+      return function() {
+        var pos = this.state.types.indexOf(type);
+        if (pos === -1) {
+          this.state.types.push(type);
+        } else {
+          this.state.types.splice(pos, 1);
+        }
 
-      if ($(e.target).hasClass('btn')) {
-        $btn = $(e.target);
-      } else {
-        $btn = $(e.target).closest('.btn');
-      }
-
-      var type = $btn.find('.type').text();
-      var pos = this.state.types.indexOf(type);
-      if (pos === -1) {
-        this.state.types.push(type);
-      } else {
-        this.state.types.splice(pos, 1);
-      }
-
-      store('types', this.state.types);
-      this.fetchData();
+        store('types', this.state.types);
+        console.log(this.state.types);
+        this.fetchData();
+      }.bind(this);
     },
-    handleMonthClick: function(e) {
-      this.state.month = $(e.target).text();
-      this.fetchData();
+    handleMonthClick: function(month) {
+      return function() {
+        this.state.month = month;
+        this.fetchData();
+      }.bind(this);
     },
     generateSql: function() {
       var filters = [];
@@ -108,12 +106,12 @@ window.jQuery(document).ready(function($) {
       var types = _.map(data.glyphicons, function(icon, name) {
         var pos = this.state.types.indexOf(name);
         var active = pos !== -1;
-        return React.createElement("button", {key: name, type: "button", onClick: this.handleTypeClick, className: "btn btn-default" + (active ? " active" : "")}, React.createElement("span", {className: "glyphicon glyphicon-" + icon}), React.createElement("span", {className: "type"}, name));
+        return React.createElement("button", {key: name, type: "button", onClick: this.handleTypeClick(name), className: "btn btn-default" + (active ? " active" : "")}, React.createElement("span", {className: "glyphicon glyphicon-" + icon}), React.createElement("span", {className: "type"}, name));
       }.bind(this));
 
       var months = data.months.map(function(month) {
         var active = month == this.state.month;
-        return React.createElement("button", {key: month, type: "button", onClick: this.handleMonthClick, className: "col-xs-2 col-md-1 btn btn-default" + (active ? " active" : "")}, { month});
+        return React.createElement("button", {key: month, type: "button", ref: "button", onClick: this.handleMonthClick(month), className: "col-xs-2 col-md-1 btn btn-default" + (active ? " active" : "")}, { month});
       }.bind(this));
 
       var plants;
