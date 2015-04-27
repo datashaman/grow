@@ -8,15 +8,30 @@
 
     <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
 
+    {% if site.serving %}
     <link rel="stylesheet" href="{{ "/bower_components/bootstrap/dist/css/bootstrap.css" | prepend: site.baseurl }}" />
+    {% else %}
+    <link rel="stylesheet" href="{{ "/bower_components/bootstrap/dist/css/bootstrap.min.css" | prepend: site.baseurl }}" />
+    {% endif %}
+
     <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}" />
 
     <!--[if lt IE 9]>
+        {% if site.serving %}
         <script src="{{ "/bower_components/html5shiv/dist/html5shiv.js" | prepend: site.baseurl }}"></script>
         <script src="{{ "/bower_components/respond/dest/respond.src.js" | prepend: site.baseurl }}"></script>
+        {% else %}
+        <script src="{{ "/bower_components/html5shiv/dist/html5shiv.min.js" | prepend: site.baseurl }}"></script>
+        <script src="{{ "/bower_components/respond/dest/respond.min.js" | prepend: site.baseurl }}"></script>
+        {% endif %}
     <![endif]-->
 
-    <script src="{{ "/bower_components/jquery/dist/jquery.js" | prepend: site.baseurl }}"></script>
+    {% if site.serving %}
+      <script src="{{ "/bower_components/jquery/dist/jquery.js" | prepend: site.baseurl }}"></script>
+    {% else %}
+      <script src="{{ "/bower_components/jquery/dist/jquery.min.js" | prepend: site.baseurl }}"></script>
+    {% endif %}
+
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -55,14 +70,22 @@
 
     {{ content }}
 
+    {% if site.serving %}
     <script src="{{ "/bower_components/bootstrap/dist/js/bootstrap.js" | prepend: site.baseurl }}"></script>
     <script src="{{ "/bower_components/lodash/lodash.js" | prepend: site.baseurl }}"></script>
     <script src="{{ "/bower_components/store/dist/store2.js" | prepend: site.baseurl }}"></script>
-
-    <script src="{{ "/js/main.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/react/react.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/react/JSXTransformer.js" | prepend: site.baseurl }}"></script>
+    {% else %}
+    <script src="{{ "/bower_components/bootstrap/dist/js/bootstrap.min.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/lodash/lodash.min.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/store/dist/store2.min.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/react/react.min.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/bower_components/react/JSXTransformer.js" | prepend: site.baseurl }}"></script>
+    {% endif %}
 
     <script>
-    var google_api_key = {{ site.google_api_key | jsonify }};
+    var googleApiKey = {{ site.google_api_key | jsonify }};
     var baseurl = {{ site.baseurl | jsonify }};
     var data = {{ site.data | jsonify }};
     </script>

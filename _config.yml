@@ -13,3 +13,4 @@ google_api_key: AIzaSyBUE58hcq5yxNE_-tL-YCGPdfZ39mYgKTw
 
 # Build settings
 markdown: kramdown
+exclude: ["Gemfile*", "bower.json"]
