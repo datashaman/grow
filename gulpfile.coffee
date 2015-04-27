@@ -9,6 +9,8 @@ sass = require('gulp-sass')
 concat = require('gulp-concat')
 uglify = require('gulp-uglify')
 rename = require('gulp-rename')
+browserSync = require('browser-sync')
+reload = browserSync.reload
 
 gulp.task 'cjsx', ->
   gulp.src [ 'assets/scripts/**/*.cjsx' ]
@@ -45,11 +47,18 @@ gulp.task 'sass', ->
     .pipe sass()
     .pipe sourcemaps.write()
     .pipe gulp.dest 'styles'
+    .pipe reload stream: true
     .on 'error', gutil.log
 
-gulp.task 'watch', ['default'], ->
+gulp.task 'serve', ['default'], ->
+  browserSync
+    proxy: 'http://localhost:4000'
+
+  gulp.watch 'bower_components/**/*', ['vendor']
   gulp.watch 'assets/scripts/**/*.cjsx', ['cjsx']
   gulp.watch 'assets/styles/**/*.{sass,scss}', ['sass']
+  gulp.watch 'index.html', reload
+  gulp.watch 'settings.html', reload
 
 gulp.task 'scripts', ['cjsx', 'vendor']
 
