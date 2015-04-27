@@ -9,21 +9,21 @@ window.jQuery(document).ready ($) ->
 
   Schedule = React.createClass
     componentDidMount: ->
-      this.fetchData()
+      @fetchData()
       null
 
     componentDidUpdate: ->
-      if this.state.fetching
-        this.state.spinner = new window.Spinner().spin(document.getElementById('plants'))
+      if @state.fetching
+        @state.spinner = new window.Spinner().spin(document.getElementById('plants'))
       else
-        if this.state.spinner
-          this.state.spinner.stop()
-          this.state.spinner = null
+        if @state.spinner
+          @state.spinner.stop()
+          @state.spinner = null
       null
 
     componentWillUnmount: ->
-      if this.state.spinner
-        this.state.spinner.stop()
+      if @state.spinner
+        @state.spinner.stop()
       null
 
     getInitialState: ->
@@ -39,50 +39,50 @@ window.jQuery(document).ready ($) ->
 
     handleTypeClick: (type) ->
       =>
-        pos = this.state.types.indexOf(type)
+        pos = @state.types.indexOf(type)
         if pos == -1
-          this.state.types.push(type)
+          @state.types.push(type)
         else
           # You can't disable all types
           # Do nothing if there is only one left
-          return false if this.state.types.length == 1
+          return false if @state.types.length == 1
 
-          this.state.types.splice(pos, 1)
+          @state.types.splice(pos, 1)
 
-        store('types', this.state.types)
-        this.fetchData()
+        store('types', @state.types)
+        @fetchData()
         false
 
     handleMonthClick: (month) ->
       =>
-        this.state.month = month
-        this.fetchData()
+        @state.month = month
+        @fetchData()
         false
 
     generateSql: ->
       filters = []
 
-      if this.state.types.length == 0
+      if @state.types.length == 0
         # If no types selected, no rows returned
         filters = ['1 = 0']
-      else if this.state.types.length == data.types.length
+      else if @state.types.length == data.types.length
         # If all types selected, all rows returned (no filter)
       else
         # Filter one or the other type
-        filters = _.map this.state.types, (type) ->
+        filters = _.map @state.types, (type) ->
           'Type = \'' + type + '\''
 
-      filters.push('Climate = \'' + this.state.climate + '\'')
-      filters.push(this.state.month + ' NOT EQUAL TO \'\'')
+      filters.push('Climate = \'' + @state.climate + '\'')
+      filters.push(@state.month + ' NOT EQUAL TO \'\'')
 
-      'select Name, ' + this.state.month + ', Type FROM ' + data.tables.schedule +
+      'select Name, ' + @state.month + ', Type FROM ' + data.tables.schedule +
         ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name'
 
     fetchData: ->
-      this.setState({ fetching: true })
+      @setState({ fetching: true })
 
       $.getJSON 'https://www.googleapis.com/fusiontables/v1/query',
-        sql: this.generateSql(),
+        sql: @generateSql(),
         key: googleApiKey
       , (scheduleResponse) =>
         $.getJSON 'https://www.googleapis.com/fusiontables/v1/query',
@@ -90,27 +90,27 @@ window.jQuery(document).ready ($) ->
             ' ORDER BY Name',
           key: googleApiKey
         , (plantsResponse) =>
-          this.setState
+          @setState
             fetching: false,
             schedule: scheduleResponse.rows,
             plants: plantsResponse.rows
 
     render: ->
       types = _.map data.glyphicons, (icon, name) =>
-        pos = this.state.types.indexOf(name)
+        pos = @state.types.indexOf(name)
         active = pos != -1
-        <button key={name} type="button" onClick={this.handleTypeClick(name)} className={'btn btn-default' + (if active then ' active' else '')}><span className={'glyphicon glyphicon-' + icon}></span><span className="type">{name}</span></button>
+        <button key={name} type="button" onClick={@handleTypeClick(name)} className={'btn btn-default' + (if active then ' active' else '')}><span className={'glyphicon glyphicon-' + icon}></span><span className="type">{name}</span></button>
 
       months = data.months.map (month) =>
-        active = month == this.state.month
-        <button key={month} type="button" ref="button" onClick={this.handleMonthClick(month)} className={'col-xs-2 col-md-1 btn btn-default' + (if active then ' active' else '')}>{{ month }}</button>
+        active = month == @state.month
+        <button key={month} type="button" ref="button" onClick={@handleMonthClick(month)} className={'col-xs-2 col-md-1 btn btn-default' + (if active then ' active' else '')}>{{ month }}</button>
 
-      if this.state.fetching
+      if @state.fetching
         plants = ''
       else
-        plants = _.map this.state.schedule, (schedule) =>
+        plants = _.map @state.schedule, (schedule) =>
           name = schedule[0]
-          plant = _.find this.state.plants, (plant) -> plant[0] == name
+          plant = _.find @state.plants, (plant) -> plant[0] == name
           wikipedia = if plant then plant[1] else null
 
           <li key={schedule[0]} className="list-group-item">
@@ -124,7 +124,7 @@ window.jQuery(document).ready ($) ->
       <div>
         <div className="page-header">
             <div className="container">
-                <h2>{ this.state.climate }</h2>
+                <h2>{ @state.climate }</h2>
                 <div id="types" className="btn-group" role="toolbar" aria-label="plant types">
                     {types}
                 </div>
