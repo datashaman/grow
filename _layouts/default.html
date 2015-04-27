@@ -71,19 +71,9 @@
     {{ content }}
 
     {% if site.serving %}
-    <script src="{{ "/bower_components/bootstrap/dist/js/bootstrap.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/lodash/lodash.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/store/dist/store2.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/react/react-with-addons.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/react/JSXTransformer.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/spin.js/spin.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/scripts/vendor.js" | prepend: site.baseurl }}"></script>
     {% else %}
-    <script src="{{ "/bower_components/bootstrap/dist/js/bootstrap.min.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/lodash/lodash.min.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/store/dist/store2.min.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/react/react-with-addons.min.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/react/JSXTransformer.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/spin.js/spin.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "/scripts/vendor.min.js" | prepend: site.baseurl }}"></script>
     {% endif %}
 
     <script>
