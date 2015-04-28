@@ -1,5 +1,7 @@
 'use strict'
 
+React = require('react')
+
 gutil = require('gulp-util')
 gulp = require('gulp')
 jshint = require('gulp-jshint')
@@ -11,6 +13,7 @@ uglify = require('gulp-uglify')
 rename = require('gulp-rename')
 browserSync = require('browser-sync')
 reload = browserSync.reload
+template = require('gulp-template')
 
 gulp.task 'cjsx', ->
   gulp.src [ 'assets/scripts/**/*.cjsx' ]
@@ -18,8 +21,8 @@ gulp.task 'cjsx', ->
     .pipe cjsx
       harmony: true
       bare: true
-    .pipe jshint '.jshintrc'
-    .pipe jshint.reporter 'default'
+    # .pipe jshint '.jshintrc'
+    #  .pipe jshint.reporter 'default'
     .pipe sourcemaps.write '.'
     .pipe gulp.dest 'scripts'
     .on 'error', gutil.log
@@ -50,6 +53,19 @@ gulp.task 'sass', ->
     .pipe reload stream: true
     .on 'error', gutil.log
 
+gulp.task 'html', ->
+  months = require('./_data/months.json')
+  Schedule = require('./scripts/schedule.js')
+
+  today = new Date()
+  month = months[today.getMonth()]
+  Schedule.doFetchData 'Dry Summer - Wet Winter', [ 'Fruit / Vegetable', 'Herb' ], month, (err, props) ->
+    schedule = React.createElement(Schedule, props)
+
+    gulp.src [ 'assets/index.html' ]
+      .pipe template({ schedule: React.renderToString(schedule) })
+      .pipe gulp.dest '.'
+
 gulp.task 'serve', ['default'], ->
   browserSync
     proxy: 'http://localhost:4000'
@@ -64,4 +80,4 @@ gulp.task 'scripts', ['cjsx', 'vendor']
 
 gulp.task 'styles', ['sass']
 
-gulp.task 'default', ['scripts', 'styles']
+gulp.task 'default', ['scripts', 'styles', 'html']

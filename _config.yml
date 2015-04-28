@@ -4,7 +4,6 @@ email: marlinf@datashaman.com
 description: Planting schedule for South African fruit, vegetables and herbs.
 baseurl: "/grow" # the subpath of your site, e.g. /blog/
 url: "http://datashaman.github.io" # the base hostname & protocol for your site
-google_api_key: AIzaSyBUE58hcq5yxNE_-tL-YCGPdfZ39mYgKTw
 
 # Build settings
 markdown: kramdown
@@ -17,3 +16,4 @@ exclude:
   - js/.module-cache
   - node_modules
   - package.json
+  - webpack.config.js
