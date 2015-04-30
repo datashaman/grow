@@ -13,7 +13,7 @@ module.exports = (opt) ->
           unless /index\.html$/.test(file.path)
             file.path = file.path.replace(/\.html$/, '/index.html')
 
-        url = path.relative(__dirname + '/../src', file.path)
+        url = path.relative(path.resolve(opt.root), file.path)
 
         if /index\.html$/.test(file.path)
           url = url.replace(/index\.html$/, '')

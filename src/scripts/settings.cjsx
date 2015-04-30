@@ -23,9 +23,12 @@ jQuery(document).ready ($) ->
 
   initListGroup('#select-climate', '#climate', 'climate', 'Dry Summer - Wet Winter')
 
-  $('#settings').submit ->
+  $('#settings').submit (e) ->
+    e.preventDefault()
+
     elements = $('#settings').serializeArray()
     values = _.zipObject _.map elements, (element) -> [element.name, element.value]
     store(values)
     window.location.href = config.site.baseurl + '/'
-    false
+
+    null

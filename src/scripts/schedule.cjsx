@@ -6,7 +6,7 @@ Schedule = React.createClass
       if types.length == 0
         # If no types selected, no rows returned
         filters = ['1 = 0']
-      else if types.length == config.references.types.length
+      else if types.length == config.types.length
         # If all types selected, all rows returned (no filter)
       else
         # Filter one or the other type
@@ -45,53 +45,53 @@ Schedule = React.createClass
     null
 
   componentDidUpdate: ->
-    if window?
-      if @state.fetching
-        @state.spinner = new window.Spinner().spin(document.getElementById('plants'))
-      else
-        if @state.spinner
-          @state.spinner.stop()
-          @state.spinner = null
+    if @state.fetching
+      @state.spinner = new Spinner().spin($('#plants').get(0))
+    else
+      @state.spinner.stop() if @state.spinner?
+      @state.spinner = null
     null
 
   componentWillUnmount: ->
-    if @state.spinner
-      @state.spinner.stop()
+    @state.spinner.stop() if @state.spinner?
     null
 
   getInitialState: ->
     today = new Date()
-    defaultTypes = _.map config.references.types, (type) -> type.title
+    defaultTypes = _.map config.types, (type) -> type.title
 
     types: if store? then store.get('types', defaultTypes) else defaultTypes
     climate: if store? then store.get('climate', 'Dry Summer - Wet Winter') else 'Dry Summer - Wet Winter'
-    month: config.references.months[today.getMonth()]
+    month: config.months[today.getMonth()]
     fetching: true
     plants: []
     schedule: []
     spinner: null
 
   handleTypeClick: (type) ->
-    =>
+    (e) =>
+      e.preventDefault()
+
       pos = @state.types.indexOf(type)
       if pos == -1
         @state.types.push(type)
       else
         # You can't disable all types
         # Do nothing if there is only one left
-        return false if @state.types.length == 1
+        return if @state.types.length == 1
 
         @state.types.splice(pos, 1)
 
-      store('types', @state.types)
+      store.set('types', @state.types)
       @fetchData()
-      false
+      null
 
   handleMonthClick: (month) ->
-    =>
+    (e) =>
+      e.preventDefault()
       @state.month = month
       @fetchData()
-      false
+      null
 
   fetchData: ->
     @setState({ fetching: true })
@@ -101,46 +101,62 @@ Schedule = React.createClass
       @setState data
 
   getGlyphiconByType: (title) ->
-    _.find(config.references.types, (type) -> type.title == title).icon
+    _.find(config.types, (type) -> type.title == title).icon
 
-  render: ->
-    types = _.map config.references.types, (type) =>
+  renderTypes: ->
+    _.map config.types, (type) =>
       pos = @state.types.indexOf(type.title)
       active = pos != -1
-      <button key={type.title} type="button" onClick={@handleTypeClick(type.title)} className={'btn btn-default' + (if active then ' active' else '')}><span className={'glyphicon glyphicon-' + type.icon}></span><span className="type">{type.title}</span></button>
+      <button key={type.title} type="button"
+        onClick={@handleTypeClick(type.title)}
+        className={'btn btn-default' + (if active then ' active' else '')}>
+        <span className={'glyphicon glyphicon-' + type.icon}></span>
+        <span className="type">{type.title}</span>
+      </button>
 
-    months = config.references.months.map (month) =>
+  renderMonths: ->
+    _.map config.months, (month) =>
       active = month == @state.month
-      <button key={month} type="button" ref="button" onClick={@handleMonthClick(month)} className={'col-xs-2 col-md-1 btn btn-default' + (if active then ' active' else '')}>{{ month }}</button>
+      <button key={month} type="button"
+        onClick={@handleMonthClick(month)}
+        className={'col-xs-2 col-md-1 btn btn-default' + (if active then ' active' else '')}>
+        {{ month }}
+      </button>
 
+  renderPlants: ->
     if @state.fetching
-      plants = ''
+      ''
     else
-      plants = _.map @state.schedule, (schedule) =>
-        name = schedule[0]
-        plant = _.find @state.plants, (plant) -> plant[0] == name
-        wikipedia = if plant then plant[1] else null
+      _.map @state.schedule, (schedule) =>
+        [ schedulePlant, instruction, type ] = schedule
+        plant = _.find @state.plants, (plant) -> plant[0] == schedulePlant
 
-        <li key={schedule[0]} className="list-group-item">
-          {if wikipedia then <a target="_blank" className="wikipedia" href={wikipedia}>
-          <span className="glyphicon glyphicon-info-sign pull-right"></span></a>}
-          <span className="instruction pull-right">{config.references.instructions[schedule[1]]}</span>
-          <span className={'glyphicon glyphicon-' + @getGlyphiconByType(schedule[2])} aria-hidden="true"></span>
-          {schedule[0]}
-        </li>
+        if plant?
+          [ ..., wikipedia ] = plant
 
+          <li key={schedulePlant} className="list-group-item">
+            {if wikipedia then <a target="_blank" className="wikipedia" href={wikipedia}>
+            <span className="glyphicon glyphicon-info-sign pull-right"></span></a> else ''}
+            <span className="instruction pull-right">{config.instructions[instruction]}</span>
+            <span className={'glyphicon glyphicon-' + @getGlyphiconByType(type)} aria-hidden="true"></span>
+            {schedulePlant}
+          </li>
+        else
+          ''
+
+  render: ->
     <div>
       <div className="page-header">
-          <div className="container">
-              <h2>{ @state.climate }</h2>
-              <div id="types" className="btn-group" role="toolbar" aria-label="plant types">
-                  {types}
-              </div>
+        <div className="container">
+          <h2>{ @state.climate }</h2>
+          <div id="types" className="btn-group" role="toolbar" aria-label="plant types">
+            { @renderTypes() }
           </div>
+        </div>
       </div>
 
       <div className="container">
-          <div className="months row">{months}</div>
-          <ul id="plants" className="list-group">{plants}</ul>
+        <div className="months row">{ @renderMonths() }</div>
+        <ul id="plants" className="list-group">{ @renderPlants() }</ul>
       </div>
     </div>
