@@ -8,6 +8,14 @@
     "coffee-react-transform": "^3.1.0",
     "coffee-script": "^1.9.2",
     "glob": "^5.0.5",
+    "gray-matter": "^2.0.0",
+    "gulp": "^3.8.11",
+    "gulp-data": "^1.2.0",
+    "gulp-front-matter": "^1.2.2",
+    "gulp-markdown": "^1.0.0",
+    "gulp-swig": "^0.7.4",
+    "gulp-load-plugins": "^0.10.0",
+    "gulp-marked": "^1.0.0",
     "http-server": "^0.8.0",
     "js-yaml": "^3.3.0",
     "lodash": "^3.7.0",
@@ -31,5 +39,8 @@
   "bugs": {
     "url": "https://github.com/datashaman/grow/issues"
   },
-  "homepage": "https://github.com/datashaman/grow"
+  "homepage": "https://github.com/datashaman/grow",
+  "dependencies": {
+    "gulp-clean": "^0.3.1"
+  }
 }
