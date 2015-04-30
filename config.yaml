@@ -5,6 +5,12 @@ site:
   baseurl: ""
   url: http://datashaman.github.io
 
+navbar:
+  - url: /
+    title: Home
+  - url: /settings/
+    title: Settings
+
 references:
   types:
     - title: Herb

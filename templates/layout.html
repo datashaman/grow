@@ -16,15 +16,15 @@
 
     <title>{{ title }}</title>
 
-    <link rel="stylesheet" href="{{ "bower_components/bootstrap/dist/css/bootstrap.css" | baseurl }}" />
-    <link rel="stylesheet" href="{{ "styles/main.css" | baseurl }}" />
+    <link rel="stylesheet" href="{{ "/bower_components/bootstrap/dist/css/bootstrap.css" | baseurl }}" />
+    <link rel="stylesheet" href="{{ "/styles/main.css" | baseurl }}" />
 
     {% block styles %}
     {% endblock %}
 
     <!--[if lt IE 9]>
-    <script src="{{ "bower_components/html5shiv/dist/html5shiv.js" | baseurl }}"></script>
-    <script src="{{ "bower_components/respond/dest/respond.src.js" | baseurl }}"></script>
+    <script src="{{ "/bower_components/html5shiv/dist/html5shiv.js" | baseurl }}"></script>
+    <script src="{{ "/bower_components/respond/dest/respond.src.js" | baseurl }}"></script>
     <![endif]-->
 </head>
 
@@ -42,6 +42,13 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
+                  {% for item in config.navbar %}
+                  <li
+                  {% if item.url == url %}
+                  class="active"
+                  {% endif %}
+                  ><a href="{{ item.url | baseurl }}">{{ item.title }}</a></li>
+                  {% endfor %}
                 </ul>
             </div>
         </div>
@@ -51,8 +58,8 @@
     Content
     {% endblock %}
 
-    <script src="{{ "bower_components/jquery/dist/jquery.js" | baseurl }}"></script>
-    <script src="{{ "bower_components/bootstrap/dist/js/bootstrap.js" | baseurl }}"></script>
+    <script src="{{ "/bower_components/jquery/dist/jquery.js" | baseurl }}"></script>
+    <script src="{{ "/bower_components/bootstrap/dist/js/bootstrap.js" | baseurl }}"></script>
 
     <script>
     var config = {{ JSON.stringify(config) }};

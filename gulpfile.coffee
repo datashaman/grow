@@ -33,17 +33,17 @@ gulp.task 'markdown', ->
     .pipe plugins.changed 'build', extension: '.html'
     .pipe plugins.frontMatter property: 'data'
     .pipe plugins.data config: config
-    .pipe plugins.markdown()
     .pipe index()
+    .pipe plugins.markdown()
     .pipe gulp.dest 'build'
 
 gulp.task 'swig', ->
   gulp.src 'src/**/*.html'
     .pipe plugins.frontMatter property: 'data'
     .pipe plugins.data config: config
+    .pipe index()
     .pipe plugins.swig
       defaults: cache: false
-    .pipe index()
     .pipe gulp.dest 'build'
 
 gulp.task 'sass', ->
