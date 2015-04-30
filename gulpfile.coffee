@@ -23,7 +23,6 @@ gulp.task 'bower', ->
   gulp.src 'bower_components/**/*'
     .pipe plugins.changed 'build/bower_components'
     .pipe gulp.dest 'build/bower_components'
-  null
 
 gulp.task 'cjsx', ->
   gulp.src 'src/**/*.cjsx'
