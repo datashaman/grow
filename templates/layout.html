@@ -47,15 +47,12 @@
         </div>
     </nav>
 
-    {{ title }}
-
     {% block content %}
     Content
     {% endblock %}
 
     <script src="{{ "bower_components/jquery/dist/jquery.js" | baseurl }}"></script>
     <script src="{{ "bower_components/bootstrap/dist/js/bootstrap.js" | baseurl }}"></script>
-    <script src="{{ "bower_components/react/react.js" | baseurl }}"></script>
 
     <script>
     var config = {{ JSON.stringify(config) }};
