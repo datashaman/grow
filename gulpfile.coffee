@@ -4,7 +4,9 @@ del = require 'del'
 yaml = require 'js-yaml'
 plugins = require('gulp-load-plugins')()
 index = require './plugins/gulp-index'
+assets = require './plugins/gulp-assets'
 browserSync = require 'browser-sync'
+path = require 'path'
 reload = browserSync.reload
 swig = require 'swig'
 
@@ -20,12 +22,15 @@ gulp.task 'clean', ->
   del('build')
 
 gulp.task 'bower', ->
-  gulp.src 'bower_components/**/*'
+  gulp.src 'src/bower_components/**/*'
     .pipe plugins.changed 'build/bower_components'
     .pipe gulp.dest 'build/bower_components'
 
 gulp.task 'cjsx', ->
-  gulp.src 'src/**/*.cjsx'
+  gulp.src [
+      '!src/bower_components/**/*.cjsx',
+      'src/**/*.cjsx'
+    ]
     .pipe plugins.changed 'build', extension: '.js'
     .pipe plugins.cjsx bare: true
     .pipe plugins.uglify()
@@ -33,7 +38,10 @@ gulp.task 'cjsx', ->
     .pipe reload stream: true
 
 gulp.task 'markdown', ->
-  gulp.src 'src/**/*.md'
+  gulp.src [
+      '!src/bower_components/**/*.md',
+      'src/**/*.md'
+    ]
     .pipe plugins.changed 'build', extension: '.html'
     .pipe plugins.frontMatter property: 'data'
     .pipe plugins.data config: config
@@ -41,24 +49,35 @@ gulp.task 'markdown', ->
     .pipe plugins.markdown()
     .pipe gulp.dest 'build'
 
-gulp.task 'swig', ->
-  gulp.src 'src/**/*.html'
+gulp.task 'swig', [ 'bower' ], ->
+  gulp.src [
+      '!src/bower_components/**/*.html',
+      'src/**/*.html'
+    ]
     .pipe plugins.frontMatter property: 'data'
     .pipe plugins.data config: config
     .pipe index root: 'src'
     .pipe plugins.swig
       defaults: cache: false
+    .pipe plugins.debug()
+    .pipe assets root: 'src'
     .pipe gulp.dest 'build'
 
 gulp.task 'sass', ->
-  gulp.src 'src/**/*.{sass,scss}'
+  gulp.src [
+      '!src/bower_components/**/*.{sass,scss}',
+      'src/**/*.{sass,scss}'
+    ]
     .pipe plugins.changed 'build', extension: '.css'
     .pipe plugins.sass outputStyle: 'compressed'
     .pipe gulp.dest 'build'
     .pipe reload stream: true
 
 gulp.task 'less', ->
-  gulp.src 'src/**/*.less'
+  gulp.src [
+      '!src/bower_components/**/*.less',
+      'src/**/*.less'
+    ]
     .pipe plugins.changed 'build', extension: '.css'
     .pipe plugins.less compress: true
     .pipe gulp.dest 'build'

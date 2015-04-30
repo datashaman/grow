@@ -65,11 +65,7 @@
     var config = {{ JSON.stringify(config) }};
     </script>
 
-    {% block scripts %}
-    {% for script in scripts %}
-    <script src="{{ script | baseurl }}"></script>
-    {% endfor %}
-    {% endblock %}
+    <!-- scripts -->
 </body>
 
 </html>

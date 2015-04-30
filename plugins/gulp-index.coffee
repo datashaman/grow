@@ -3,23 +3,23 @@ path = require 'path'
 through2 = require 'through2'
 
 module.exports = (opt) ->
-    func = (file, encoding, done) ->
-        return done(null, file) if file.isNull()
+  func = (file, encoding, done) ->
+    return done(null, file) if file.isNull()
 
-        if file.isStream()
-            return done(new gutil.PluginError('gulp-index', 'doesn\'t support Streams'))
+    if file.isStream()
+      return done(new gutil.PluginError('gulp-index', 'doesn\'t support Streams'))
 
-        if /\.html$/.test(file.path)
-          unless /index\.html$/.test(file.path)
-            file.path = file.path.replace(/\.html$/, '/index.html')
+    if /\.html$/.test(file.path)
+      unless /index\.html$/.test(file.path)
+        file.path = file.path.replace(/\.html$/, '/index.html')
 
-        url = path.relative(path.resolve(opt.root), file.path)
+    url = path.relative(path.resolve(opt.root), file.path)
 
-        if /index\.html$/.test(file.path)
-          url = url.replace(/index\.html$/, '')
+    if /index\.html$/.test(file.path)
+      url = url.replace(/index\.html$/, '')
 
-        file.data.url = '/' + url
+    file.data.url = '/' + url
 
-        done(null, file)
+    done(null, file)
 
-    through2.obj(func)
+  through2.obj(func)
