@@ -78,6 +78,10 @@ gulp.task 'serve', [ 'default' ], ->
   gulp.watch 'src/**/*.{sass,scss}', [ 'sass' ]
   gulp.watch 'src/**/*.less', [ 'less' ]
 
+gulp.task 'deploy', ->
+  gulp.src 'build/**/*'
+    .pipe plugins.ghPages()
+
 gulp.task 'components', [ 'bower' ]
 gulp.task 'content', [ 'markdown', 'swig' ]
 gulp.task 'scripts', [ 'cjsx' ]
