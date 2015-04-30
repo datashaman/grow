@@ -5,10 +5,13 @@
   "main": "index.js",
   "devDependencies": {
     "browser-sync": "^2.6.5",
+    "coffee-react-transform": "^3.1.0",
     "coffee-script": "^1.9.2",
+    "glob": "^5.0.5",
+    "http-server": "^0.8.0",
     "js-yaml": "^3.3.0",
+    "lodash": "^3.7.0",
     "metalsmith": "^1.6.0",
-    "metalsmith-copy": "^0.2.1",
     "metalsmith-markdown": "^0.2.1",
     "metalsmith-metadata": "0.0.1",
     "metalsmith-sass": "^0.7.0",
@@ -28,10 +31,5 @@
   "bugs": {
     "url": "https://github.com/datashaman/grow/issues"
   },
-  "homepage": "https://github.com/datashaman/grow",
-  "dependencies": {
-    "lodash": "^3.7.0",
-    "react": "^0.13.2",
-    "superagent": "^1.2.0"
-  }
+  "homepage": "https://github.com/datashaman/grow"
 }

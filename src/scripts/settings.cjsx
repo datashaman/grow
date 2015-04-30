@@ -1,10 +1,6 @@
 'use strict'
 
-window.jQuery(document).ready ($) ->
-  _ = window._
-  baseurl = window.baseurl
-  store = window.store
-
+jQuery(document).ready ($) ->
   refreshListGroup = (tableView, input) ->
     $(tableView + ' .list-group-item').removeClass('active')
 
@@ -31,5 +27,5 @@ window.jQuery(document).ready ($) ->
     elements = $('#settings').serializeArray()
     values = _.zipObject _.map elements, (element) -> [element.name, element.value]
     store(values)
-    window.location.href = baseurl + '/'
+    window.location.href = config.site.baseurl + '/'
     false

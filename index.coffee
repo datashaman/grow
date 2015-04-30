@@ -1,3 +1,4 @@
+path = require 'path'
 Metalsmith = require 'metalsmith'
 markdown = require 'metalsmith-markdown'
 templates = require 'metalsmith-templates'
@@ -5,9 +6,10 @@ metadata = require 'metalsmith-metadata'
 sass = require 'metalsmith-sass'
 swig = require 'swig'
 cjsx = require './plugins/metalsmith-cjsx'
-
 fs = require 'fs'
 yaml = require 'js-yaml'
+_ = require 'lodash'
+
 config = yaml.safeLoad fs.readFileSync 'src/config.yaml', 'utf8'
 
 swig.setFilter 'baseurl', (input) -> config.site.baseurl + input

@@ -10,11 +10,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | striptags | truncate(160) }}{% else %}{{ site.description }}{% endif %}" />
+    <meta name="description" content="{% if excerpt %}{{ excerpt | striptags | truncate(160) }}{% else %}{{ config.site.description }}{% endif %}" />
 
     <link rel="canonical" href="{{ page.url | replace('index.html','') | absolute }}" />
 
-    <title>{% block title %}Page Title{% endblock %}</title>
+    <title>{{ title }}</title>
 
     <link rel="stylesheet" href="{{ "bower_components/bootstrap/dist/css/bootstrap.css" | baseurl }}" />
     <link rel="stylesheet" href="{{ "styles/main.css" | baseurl }}" />
@@ -47,18 +47,24 @@
         </div>
     </nav>
 
+    {{ title }}
+
     {% block content %}
     Content
     {% endblock %}
 
     <script src="{{ "bower_components/jquery/dist/jquery.js" | baseurl }}"></script>
     <script src="{{ "bower_components/bootstrap/dist/js/bootstrap.js" | baseurl }}"></script>
+    <script src="{{ "bower_components/react/react.js" | baseurl }}"></script>
 
     <script>
     var config = {{ JSON.stringify(config) }};
     </script>
 
     {% block scripts %}
+    {% for script in scripts %}
+    <script src="{{ script | baseurl }}"></script>
+    {% endfor %}
     {% endblock %}
 </body>
 

@@ -1,20 +1,12 @@
-if window?
-  store = window.store
-
-data = require('../data')
-React = require('react/addons')
-_ = require('lodash')
-request = require('superagent')
-
 Schedule = React.createClass
-  statics: {
+  statics:
     generateSql: (climate, types, month) ->
       filters = []
 
       if types.length == 0
         # If no types selected, no rows returned
         filters = ['1 = 0']
-      else if types.length == data.types.length
+      else if types.length == config.references.types.length
         # If all types selected, all rows returned (no filter)
       else
         # Filter one or the other type
@@ -24,28 +16,29 @@ Schedule = React.createClass
       filters.push('Climate = \'' + climate + '\'')
       filters.push(month + ' NOT EQUAL TO \'\'')
 
-      'select Name, ' + month + ', Type FROM ' + data.tables.schedule +
+      'select Name, ' + month + ', Type FROM ' + config.services.google.tables.schedule +
         ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name'
 
     doFetchData: (climate, types, month, done) ->
-      request.get 'https://www.googleapis.com/fusiontables/v1/query'
-        .set 'Referer', 'http://localhost:4000'
-        .query sql: Schedule.generateSql(climate, types, month)
-        .query key: data.config.googleApiKey
-        .end (err, scheduleResponse) =>
-          if scheduleResponse.ok
-            request.get 'https://www.googleapis.com/fusiontables/v1/query'
-              .set 'Referer', 'http://localhost:4000'
-              .query sql: 'select Name, Wikipedia FROM ' + data.tables.plants + ' ORDER BY Name'
-              .query key: data.config.googleApiKey
-              .end (err, plantsResponse) =>
-                if plantsResponse.ok
-                  done null,
-                    plants: plantsResponse.body.rows
-                    schedule: scheduleResponse.body.rows
-                else
-                  done err, null
-  },
+      $.ajax
+        dataType: 'json'
+        url: 'https://www.googleapis.com/fusiontables/v1/query'
+        data:
+          sql: Schedule.generateSql(climate, types, month)
+          key: config.services.google.apiKey
+      .done (scheduleResponse) =>
+        if scheduleResponse?
+          $.ajax
+            dataType: 'json'
+            url: 'https://www.googleapis.com/fusiontables/v1/query'
+            data:
+              sql: 'select Name, Wikipedia FROM ' + config.services.google.tables.plants + ' ORDER BY Name'
+              key: config.services.google.apiKey
+          .done (plantsResponse) ->
+              if plantsResponse?
+                done null,
+                  plants: plantsResponse.rows
+                  schedule: scheduleResponse.rows
 
   componentWillMount: ->
     @fetchData()
@@ -68,11 +61,11 @@ Schedule = React.createClass
 
   getInitialState: ->
     today = new Date()
-    defaultTypes = _.clone(data.types)
+    defaultTypes = _.map config.references.types, (type) -> type.title
 
     types: if store? then store.get('types', defaultTypes) else defaultTypes
     climate: if store? then store.get('climate', 'Dry Summer - Wet Winter') else 'Dry Summer - Wet Winter'
-    month: data.months[today.getMonth()]
+    month: config.references.months[today.getMonth()]
     fetching: true
     plants: []
     schedule: []
@@ -107,13 +100,16 @@ Schedule = React.createClass
       data.fetching = false
       @setState data
 
-  render: ->
-    types = _.map data.glyphicons, (icon, name) =>
-      pos = @state.types.indexOf(name)
-      active = pos != -1
-      <button key={name} type="button" onClick={@handleTypeClick(name)} className={'btn btn-default' + (if active then ' active' else '')}><span className={'glyphicon glyphicon-' + icon}></span><span className="type">{name}</span></button>
+  getGlyphiconByType: (title) ->
+    _.find(config.references.types, (type) -> type.title == title).icon
 
-    months = data.months.map (month) =>
+  render: ->
+    types = _.map config.references.types, (type) =>
+      pos = @state.types.indexOf(type.title)
+      active = pos != -1
+      <button key={type.title} type="button" onClick={@handleTypeClick(type.title)} className={'btn btn-default' + (if active then ' active' else '')}><span className={'glyphicon glyphicon-' + type.icon}></span><span className="type">{type.title}</span></button>
+
+    months = config.references.months.map (month) =>
       active = month == @state.month
       <button key={month} type="button" ref="button" onClick={@handleMonthClick(month)} className={'col-xs-2 col-md-1 btn btn-default' + (if active then ' active' else '')}>{{ month }}</button>
 
@@ -128,8 +124,8 @@ Schedule = React.createClass
         <li key={schedule[0]} className="list-group-item">
           {if wikipedia then <a target="_blank" className="wikipedia" href={wikipedia}>
           <span className="glyphicon glyphicon-info-sign pull-right"></span></a>}
-          <span className="instruction pull-right">{data.instructions[schedule[1]]}</span>
-          <span className={'glyphicon glyphicon-' + data.glyphicons[schedule[2]]} aria-hidden="true"></span>
+          <span className="instruction pull-right">{config.references.instructions[schedule[1]]}</span>
+          <span className={'glyphicon glyphicon-' + @getGlyphiconByType(schedule[2])} aria-hidden="true"></span>
           {schedule[0]}
         </li>
 
@@ -148,5 +144,3 @@ Schedule = React.createClass
           <ul id="plants" className="list-group">{plants}</ul>
       </div>
     </div>
-
-module.exports = Schedule

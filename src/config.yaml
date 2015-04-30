@@ -11,10 +11,12 @@ references:
       icon: leaf
     - title: Fruit / Vegetable
       icon: cutlery
+
   instructions:
     P: Plant / Sow
     ST: Seed Tray
     TS: Transplant Seedlings
+
   months:
     - Jan
     - Feb
