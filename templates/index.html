@@ -1,10 +1,11 @@
 {% extends 'layout.html' %}
 
-[% block content %}
+{% block content %}
 <div id="schedule">
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ "/scripts/home.entry.js" | prepend: site.baseurl }}"></script>
+<script src="{{ "scripts/schedule.js" | baseurl }}"></script>
+<script src="{{ "scripts/index.js" | baseurl }}"></script>
 {% endblock %}

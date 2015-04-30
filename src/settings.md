@@ -1,4 +1,4 @@
 ---
 title: Settings
-template: settings.swig
+template: settings.html
 ---

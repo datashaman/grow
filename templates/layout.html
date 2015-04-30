@@ -10,21 +10,21 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
+    <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | striptags | truncate(160) }}{% else %}{{ site.description }}{% endif %}" />
 
-    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
+    <link rel="canonical" href="{{ page.url | replace('index.html','') | absolute }}" />
 
     <title>{% block title %}Page Title{% endblock %}</title>
 
-    <link rel="stylesheet" href="{{ "/bower_components/bootstrap/dist/css/bootstrap.css" | prepend: site.baseurl }}" />
-    <link rel="stylesheet" href="{{ "/styles/main.css" | prepend: site.baseurl }}" />
+    <link rel="stylesheet" href="{{ "bower_components/bootstrap/dist/css/bootstrap.css" | baseurl }}" />
+    <link rel="stylesheet" href="{{ "styles/main.css" | baseurl }}" />
 
     {% block styles %}
     {% endblock %}
 
     <!--[if lt IE 9]>
-    <script src="{{ "/bower_components/html5shiv/dist/html5shiv.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/respond/dest/respond.src.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "bower_components/html5shiv/dist/html5shiv.js" | baseurl }}"></script>
+    <script src="{{ "bower_components/respond/dest/respond.src.js" | baseurl }}"></script>
     <![endif]-->
 </head>
 
@@ -38,7 +38,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ "/" | prepend: site.baseurl }}">Grow</a>
+                <a class="navbar-brand" href="{{ "/" | baseurl }}">Grow</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
@@ -51,8 +51,8 @@
     Content
     {% endblock %}
 
-    <script src="{{ "/bower_components/jquery/dist/jquery.js" | prepend: site.baseurl }}"></script>
-    <script src="{{ "/bower_components/bootstrap/dist/js/bootstrap.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ "bower_components/jquery/dist/jquery.js" | baseurl }}"></script>
+    <script src="{{ "bower_components/bootstrap/dist/js/bootstrap.js" | baseurl }}"></script>
 
     <script>
     var config = {{ JSON.stringify(config) }};
