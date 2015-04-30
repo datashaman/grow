@@ -1,0 +1,1 @@
+"use strict";jQuery(document).ready(function(e){return React.render(React.createElement(Schedule,null),e("#schedule").get(0))});
