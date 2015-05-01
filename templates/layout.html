@@ -12,19 +12,21 @@
 
     <meta name="description" content="{% if excerpt %}{{ excerpt | striptags | truncate(160) }}{% else %}{{ config.site.description }}{% endif %}" />
 
-    <link rel="canonical" href="{{ page.url | replace('index.html','') | absolute }}" />
+    <link rel="canonical" href="{{ url | absolute }}" />
 
     <title>{{ title }}</title>
 
-    <link rel="stylesheet" href="{{ "/bower_components/bootstrap/dist/css/bootstrap.css" | baseurl }}" />
+    <link rel="stylesheet" href="{{ "/bower_components/bootstrap/dist/css/bootstrap.min.css" | baseurl }}" />
     <link rel="stylesheet" href="{{ "/styles/main.css" | baseurl }}" />
 
     {% block styles %}
     {% endblock %}
 
     <!--[if lt IE 9]>
-    <script src="{{ "/bower_components/html5shiv/dist/html5shiv.js" | baseurl }}"></script>
-    <script src="{{ "/bower_components/respond/dest/respond.src.js" | baseurl }}"></script>
+    <!-- build:js /assets/ie.js -->
+    <script src="{{ "/bower_components/html5shiv/dist/html5shiv.min.js" | baseurl }}"></script>
+    <script src="{{ "/bower_components/respond/dest/respond.min.js" | baseurl }}"></script>
+    <!-- endbuild -->
     <![endif]-->
 </head>
 
@@ -58,14 +60,23 @@
     Content
     {% endblock %}
 
-    <script src="{{ "/bower_components/jquery/dist/jquery.js" | baseurl }}"></script>
-    <script src="{{ "/bower_components/bootstrap/dist/js/bootstrap.js" | baseurl }}"></script>
-
     <script>
     var config = {{ JSON.stringify(config) }};
     </script>
 
-    <!-- scripts -->
+    <script>
+    function r(f){/in/.test(document.readyState)?setTimeout(r,9,f):f()}
+    </script>
+
+    <script defer src="{{ "/bower_components/jquery/dist/jquery.min.js" | baseurl }}"></script>
+    <script defer src="{{ "/bower_components/bootstrap/dist/js/bootstrap.min.js" | baseurl }}"></script>
+
+    {% if scripts %}
+    <!-- build:js /assets/{{ id }}.js -->
+    {% for script in scripts %}<script defer src="{{ script | baseurl }}"></script>
+    {% endfor %}
+    <!-- endbuild -->
+    {% endif %}
 </body>
 
 </html>

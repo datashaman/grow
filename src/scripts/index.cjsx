@@ -1,4 +1,4 @@
 'use strict'
 
-jQuery(document).ready ($) ->
+r ->
   React.render <Schedule />, $('#schedule').get(0)

@@ -1,6 +1,6 @@
 'use strict'
 
-jQuery(document).ready ($) ->
+r ->
   refreshListGroup = (tableView, input) ->
     $(tableView + ' .list-group-item').removeClass('active')
 

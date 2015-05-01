@@ -2,8 +2,8 @@ site:
   title: Grow
   email: marlinf@datashaman.com
   description: Planting schedule for South African fruit, vegetables and herbs.
-  baseurl: "/grow"
-  url: http://datashaman.github.io
+  url: http://localhost:3000
+  baseurl: ""
 
 navbar:
   - url: /
