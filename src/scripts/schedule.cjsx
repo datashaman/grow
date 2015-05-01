@@ -119,7 +119,7 @@ Schedule = React.createClass
       active = month == @state.month
       <button key={month} type="button"
         onClick={@handleMonthClick(month)}
-        className={'col-xs-2 col-md-1 btn btn-default' + (if active then ' active' else '')}>
+        className={'col-xs-4 col-md-1 btn btn-default' + (if active then ' active' else '')}>
         {{ month }}
       </button>
 
@@ -155,8 +155,11 @@ Schedule = React.createClass
         </div>
       </div>
 
+      <div className="months container">
+        <div className="btn-group btn-group-lg">{ @renderMonths() }</div>
+      </div>
+
       <div className="container">
-        <div className="months row">{ @renderMonths() }</div>
         <ul id="plants" className="list-group">{ @renderPlants() }</ul>
       </div>
     </div>
