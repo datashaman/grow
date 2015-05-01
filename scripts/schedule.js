@@ -207,12 +207,12 @@ Schedule = React.createClass({
       "className": "page-header"
     }, React.createElement("div", {
       "className": "container"
-    }, React.createElement("h2", null, this.state.climate), React.createElement("div", {
+    }, React.createElement("div", {
       "id": "types",
-      "className": "btn-group",
+      "className": "btn-group pull-right",
       "role": "toolbar",
       "aria-label": "plant types"
-    }, this.renderTypes()))), React.createElement("div", {
+    }, this.renderTypes()), React.createElement("h2", null, this.state.climate))), React.createElement("div", {
       "className": "months container"
     }, React.createElement("div", {
       "className": "btn-group btn-group-lg"
