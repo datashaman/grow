@@ -17,16 +17,19 @@ module.exports = (opt) ->
         scriptContent = []
         for script in file.data.scripts
           content = _.find [ 'build', 'src' ], (folder) ->
+            console.log folder
             scriptPath = path.resolve(folder) + script
-            contents = fs.readFileSync(scriptPath)
+            cntents = fs.readFileSync(scriptPath)
             scriptContent.push(contents.toString('utf8'))
         combined = scriptContent.join('\n')
+        path = file.base.replace(/src\/?$/, 'build/assets/') + path.basename(file.path, path.extname(file.path)) + '.js'
         newFile = new gutil.File
-          cwd: file.cwd
-          base: file.base
-          path: file.base + '/assets/' + path.basename(file.path, path.extname(file.path)) + '.js'
-          content: new Buffer(combined)
-        this.push(newFile)
+          cwd: '/'
+          base: opt.root
+          path: path
+          content: combined
+        console.log newFile.path
+        fs.writeFileSync(newFile.path, combined)
 
       done(null, file)
 

@@ -59,8 +59,8 @@ gulp.task 'swig', [ 'bower' ], ->
     .pipe index root: 'src'
     .pipe plugins.swig
       defaults: cache: false
-    .pipe plugins.debug()
     .pipe assets root: 'src'
+    .pipe plugins.debug()
     .pipe gulp.dest 'build'
 
 gulp.task 'sass', ->
