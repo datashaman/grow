@@ -160,7 +160,7 @@ Schedule = React.createClass({
           "key": month,
           "type": "button",
           "onClick": _this.handleMonthClick(month),
-          "className": 'col-xs-2 col-md-1 btn btn-default' + (active ? ' active' : '')
+          "className": 'col-xs-4 col-md-1 btn btn-default' + (active ? ' active' : '')
         }, {
           month: month
         });
@@ -213,10 +213,12 @@ Schedule = React.createClass({
       "role": "toolbar",
       "aria-label": "plant types"
     }, this.renderTypes()))), React.createElement("div", {
-      "className": "container"
+      "className": "months container"
     }, React.createElement("div", {
-      "className": "months row"
-    }, this.renderMonths()), React.createElement("ul", {
+      "className": "btn-group btn-group-lg"
+    }, this.renderMonths())), React.createElement("div", {
+      "className": "container"
+    }, React.createElement("ul", {
       "id": "plants",
       "className": "list-group"
     }, this.renderPlants())));
