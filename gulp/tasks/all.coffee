@@ -71,7 +71,6 @@ gulp.task 'sass', ->
     ]
     .pipe plugins.changed 'build', extension: '.css'
     .pipe plugins.sass outputStyle: 'compressed'
-    .pipe plugins.minifyCss()
     .pipe gulp.dest 'build'
     .pipe reload stream: true
 
