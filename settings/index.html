@@ -23,7 +23,7 @@
     
 
     <!--[if lt IE 9]>
-    <script defer async src="/grow/assets/ie.js"></script>
+    <script defer src="/grow/assets/ie.js"></script>
     <![endif]-->
 </head>
 
@@ -86,11 +86,15 @@
     var config = {"site":{"title":"Grow","email":"marlinf@datashaman.com","description":"Planting schedule for South African fruit, vegetables and herbs.","url":"http://datashaman.github.io","baseurl":"/grow"},"navbar":[{"url":"/","title":"Home"},{"url":"/settings/","title":"Settings"}],"types":[{"title":"Herb","icon":"leaf"},{"title":"Fruit / Vegetable","icon":"cutlery"}],"instructions":{"P":"Plant / Sow","ST":"Seed Tray","TS":"Transplant Seedlings"},"months":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"services":{"google":{"apiKey":"AIzaSyBUE58hcq5yxNE_-tL-YCGPdfZ39mYgKTw","tables":{"plants":"1cvG26bXvpl3aV28nWEPnU_GD4CBlHTwetlH97vyk","schedule":"1VQz3viT8A1k_HCK5ss8R_YYQNcshAUWUrKFJiY7j"}}}};
     </script>
 
-    <script src="/grow/bower_components/jquery/dist/jquery.min.js"></script>
-    <script defer async src="/grow/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>
+    function r(f){/in/.test(document.readyState)?setTimeout(r,9,f):f()}
+    </script>
+
+    <script defer src="/grow/bower_components/jquery/dist/jquery.min.js"></script>
+    <script defer src="/grow/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     
-    <script defer async src="/grow/assets/settings.js"></script>
+    <script defer src="/grow/assets/settings.js"></script>
     
 </body>
 

@@ -1,5 +1,5 @@
 'use strict';
-jQuery(document).ready(function($) {
+r(function() {
   var initListGroup, refreshListGroup;
   refreshListGroup = function(tableView, input) {
     var value;
