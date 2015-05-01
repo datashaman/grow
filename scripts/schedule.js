@@ -1,1 +1,224 @@
-var Schedule;Schedule=React.createClass({statics:{generateSql:function(e,t,n){var a;return a=[],0===t.length?a=["1 = 0"]:t.length===config.types.length||(a=_.map(t,function(e){return"Type = '"+e+"'"})),a.push("Climate = '"+e+"'"),a.push(n+" NOT EQUAL TO ''"),"select Name, "+n+", Type FROM "+config.services.google.tables.schedule+" WHERE "+a.join(" AND ")+" ORDER BY Name"},doFetchData:function(e,t,n,a){return $.ajax({dataType:"json",url:"https://www.googleapis.com/fusiontables/v1/query",data:{sql:Schedule.generateSql(e,t,n),key:config.services.google.apiKey}}).done(function(e){return function(e){return null!=e?$.ajax({dataType:"json",url:"https://www.googleapis.com/fusiontables/v1/query",data:{sql:"select Name, Wikipedia FROM "+config.services.google.tables.plants+" ORDER BY Name",key:config.services.google.apiKey}}).done(function(t){return null!=t?a(null,{plants:t.rows,schedule:e.rows}):void 0}):void 0}}(this))}},componentWillMount:function(){return this.fetchData(),null},componentDidUpdate:function(){return this.state.fetching?this.state.spinner=(new Spinner).spin($("#plants").get(0)):(null!=this.state.spinner&&this.state.spinner.stop(),this.state.spinner=null),null},componentWillUnmount:function(){return null!=this.state.spinner&&this.state.spinner.stop(),null},getInitialState:function(){var e,t;return t=new Date,e=_.map(config.types,function(e){return e.title}),{types:"undefined"!=typeof store&&null!==store?store.get("types",e):e,climate:"undefined"!=typeof store&&null!==store?store.get("climate","Dry Summer - Wet Winter"):"Dry Summer - Wet Winter",month:config.months[t.getMonth()],fetching:!0,plants:[],schedule:[],spinner:null}},handleTypeClick:function(e){return function(t){return function(n){var a;if(n.preventDefault(),a=t.state.types.indexOf(e),-1===a)t.state.types.push(e);else{if(1===t.state.types.length)return;t.state.types.splice(a,1)}return store.set("types",t.state.types),t.fetchData(),null}}(this)},handleMonthClick:function(e){return function(t){return function(n){return n.preventDefault(),t.state.month=e,t.fetchData(),null}}(this)},fetchData:function(){return this.setState({fetching:!0}),Schedule.doFetchData(this.state.climate,this.state.types,this.state.month,function(e){return function(t,n){return n.fetching=!1,e.setState(n)}}(this))},getGlyphiconByType:function(e){return _.find(config.types,function(t){return t.title===e}).icon},renderTypes:function(){return _.map(config.types,function(e){return function(t){var n,a;return a=e.state.types.indexOf(t.title),n=-1!==a,React.createElement("button",{key:t.title,type:"button",onClick:e.handleTypeClick(t.title),className:"btn btn-default"+(n?" active":"")},React.createElement("span",{className:"glyphicon glyphicon-"+t.icon}),React.createElement("span",{className:"type"},t.title))}}(this))},renderMonths:function(){return _.map(config.months,function(e){return function(t){var n;return n=t===e.state.month,React.createElement("button",{key:t,type:"button",onClick:e.handleMonthClick(t),className:"col-xs-2 col-md-1 btn btn-default"+(n?" active":"")},{month:t})}}(this))},renderPlants:function(){return this.state.fetching?"":_.map(this.state.schedule,function(e){return function(t){var n,a,s,i,l;return s=t[0],n=t[1],i=t[2],a=_.find(e.state.plants,function(e){return e[0]===s}),null!=a?(l=a[a.length-1],React.createElement("li",{key:s,className:"list-group-item"},l?React.createElement("a",{target:"_blank",className:"wikipedia",href:l},React.createElement("span",{className:"glyphicon glyphicon-info-sign pull-right"})):"",React.createElement("span",{className:"instruction pull-right"},config.instructions[n]),React.createElement("span",{className:"glyphicon glyphicon-"+e.getGlyphiconByType(i),"aria-hidden":"true"}),s)):""}}(this))},render:function(){return React.createElement("div",null,React.createElement("div",{className:"page-header"},React.createElement("div",{className:"container"},React.createElement("h2",null,this.state.climate),React.createElement("div",{id:"types",className:"btn-group",role:"toolbar","aria-label":"plant types"},this.renderTypes()))),React.createElement("div",{className:"container"},React.createElement("div",{className:"months row"},this.renderMonths()),React.createElement("ul",{id:"plants",className:"list-group"},this.renderPlants())))}});
+var Schedule;
+
+Schedule = React.createClass({
+  statics: {
+    generateSql: function(climate, types, month) {
+      var filters;
+      filters = [];
+      if (types.length === 0) {
+        filters = ['1 = 0'];
+      } else if (types.length === config.types.length) {
+
+      } else {
+        filters = _.map(types, function(type) {
+          return 'Type = \'' + type + '\'';
+        });
+      }
+      filters.push('Climate = \'' + climate + '\'');
+      filters.push(month + ' NOT EQUAL TO \'\'');
+      return 'select Name, ' + month + ', Type FROM ' + config.services.google.tables.schedule + ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name';
+    },
+    doFetchData: function(climate, types, month, done) {
+      return $.ajax({
+        dataType: 'json',
+        url: 'https://www.googleapis.com/fusiontables/v1/query',
+        data: {
+          sql: Schedule.generateSql(climate, types, month),
+          key: config.services.google.apiKey
+        }
+      }).done((function(_this) {
+        return function(scheduleResponse) {
+          if (scheduleResponse != null) {
+            return $.ajax({
+              dataType: 'json',
+              url: 'https://www.googleapis.com/fusiontables/v1/query',
+              data: {
+                sql: 'select Name, Wikipedia FROM ' + config.services.google.tables.plants + ' ORDER BY Name',
+                key: config.services.google.apiKey
+              }
+            }).done(function(plantsResponse) {
+              if (plantsResponse != null) {
+                return done(null, {
+                  plants: plantsResponse.rows,
+                  schedule: scheduleResponse.rows
+                });
+              }
+            });
+          }
+        };
+      })(this));
+    }
+  },
+  componentWillMount: function() {
+    this.fetchData();
+    return null;
+  },
+  componentDidUpdate: function() {
+    if (this.state.fetching) {
+      this.state.spinner = new Spinner().spin($('#plants').get(0));
+    } else {
+      if (this.state.spinner != null) {
+        this.state.spinner.stop();
+      }
+      this.state.spinner = null;
+    }
+    return null;
+  },
+  componentWillUnmount: function() {
+    if (this.state.spinner != null) {
+      this.state.spinner.stop();
+    }
+    return null;
+  },
+  getInitialState: function() {
+    var defaultTypes, today;
+    today = new Date();
+    defaultTypes = _.map(config.types, function(type) {
+      return type.title;
+    });
+    return {
+      types: typeof store !== "undefined" && store !== null ? store.get('types', defaultTypes) : defaultTypes,
+      climate: typeof store !== "undefined" && store !== null ? store.get('climate', 'Dry Summer - Wet Winter') : 'Dry Summer - Wet Winter',
+      month: config.months[today.getMonth()],
+      fetching: true,
+      plants: [],
+      schedule: [],
+      spinner: null
+    };
+  },
+  handleTypeClick: function(type) {
+    return (function(_this) {
+      return function(e) {
+        var pos;
+        e.preventDefault();
+        pos = _this.state.types.indexOf(type);
+        if (pos === -1) {
+          _this.state.types.push(type);
+        } else {
+          if (_this.state.types.length === 1) {
+            return;
+          }
+          _this.state.types.splice(pos, 1);
+        }
+        store.set('types', _this.state.types);
+        _this.fetchData();
+        return null;
+      };
+    })(this);
+  },
+  handleMonthClick: function(month) {
+    return (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        _this.state.month = month;
+        _this.fetchData();
+        return null;
+      };
+    })(this);
+  },
+  fetchData: function() {
+    this.setState({
+      fetching: true
+    });
+    return Schedule.doFetchData(this.state.climate, this.state.types, this.state.month, (function(_this) {
+      return function(err, data) {
+        data.fetching = false;
+        return _this.setState(data);
+      };
+    })(this));
+  },
+  getGlyphiconByType: function(title) {
+    return _.find(config.types, function(type) {
+      return type.title === title;
+    }).icon;
+  },
+  renderTypes: function() {
+    return _.map(config.types, (function(_this) {
+      return function(type) {
+        var active, pos;
+        pos = _this.state.types.indexOf(type.title);
+        active = pos !== -1;
+        return React.createElement("button", {
+          "key": type.title,
+          "type": "button",
+          "onClick": _this.handleTypeClick(type.title),
+          "className": 'btn btn-default' + (active ? ' active' : '')
+        }, React.createElement("span", {
+          "className": 'glyphicon glyphicon-' + type.icon
+        }), React.createElement("span", {
+          "className": "type"
+        }, type.title));
+      };
+    })(this));
+  },
+  renderMonths: function() {
+    return _.map(config.months, (function(_this) {
+      return function(month) {
+        var active;
+        active = month === _this.state.month;
+        return React.createElement("button", {
+          "key": month,
+          "type": "button",
+          "onClick": _this.handleMonthClick(month),
+          "className": 'col-xs-2 col-md-1 btn btn-default' + (active ? ' active' : '')
+        }, {
+          month: month
+        });
+      };
+    })(this));
+  },
+  renderPlants: function() {
+    if (this.state.fetching) {
+      return '';
+    } else {
+      return _.map(this.state.schedule, (function(_this) {
+        return function(schedule) {
+          var instruction, plant, schedulePlant, type, wikipedia;
+          schedulePlant = schedule[0], instruction = schedule[1], type = schedule[2];
+          plant = _.find(_this.state.plants, function(plant) {
+            return plant[0] === schedulePlant;
+          });
+          if (plant != null) {
+            wikipedia = plant[plant.length - 1];
+            return React.createElement("li", {
+              "key": schedulePlant,
+              "className": "list-group-item"
+            }, (wikipedia ? React.createElement("a", {
+              "target": "_blank",
+              "className": "wikipedia",
+              "href": wikipedia
+            }, React.createElement("span", {
+              "className": "glyphicon glyphicon-info-sign pull-right"
+            })) : ''), React.createElement("span", {
+              "className": "instruction pull-right"
+            }, config.instructions[instruction]), React.createElement("span", {
+              "className": 'glyphicon glyphicon-' + _this.getGlyphiconByType(type),
+              "aria-hidden": "true"
+            }), schedulePlant);
+          } else {
+            return '';
+          }
+        };
+      })(this));
+    }
+  },
+  render: function() {
+    return React.createElement("div", null, React.createElement("div", {
+      "className": "page-header"
+    }, React.createElement("div", {
+      "className": "container"
+    }, React.createElement("h2", null, this.state.climate), React.createElement("div", {
+      "id": "types",
+      "className": "btn-group",
+      "role": "toolbar",
+      "aria-label": "plant types"
+    }, this.renderTypes()))), React.createElement("div", {
+      "className": "container"
+    }, React.createElement("div", {
+      "className": "months row"
+    }, this.renderMonths()), React.createElement("ul", {
+      "id": "plants",
+      "className": "list-group"
+    }, this.renderPlants())));
+  }
+});

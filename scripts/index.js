@@ -1,1 +1,4 @@
-"use strict";jQuery(document).ready(function(e){return React.render(React.createElement(Schedule,null),e("#schedule").get(0))});
+'use strict';
+jQuery(document).ready(function($) {
+  return React.render(React.createElement(Schedule, null), $('#schedule').get(0));
+});

@@ -1,1 +1,37 @@
-"use strict";jQuery(document).ready(function(t){var e,i;return i=function(e,i){var r;return t(e+" .list-group-item").removeClass("active"),r=t(i).val(),r?_.find(t(e+" .list-group-item").get(),function(e){return t(e).html()===r?(t(e).addClass("active"),!0):void 0}):void 0},e=function(e,r,n,u){return t(r).val(store.get(n,u)),i(e,r),t(e+" .list-group-item").click(function(){return t(r).val(t(this).html()),i(e,r)})},e("#select-climate","#climate","climate","Dry Summer - Wet Winter"),t("#settings").submit(function(e){var i,r;return e.preventDefault(),i=t("#settings").serializeArray(),r=_.zipObject(_.map(i,function(t){return[t.name,t.value]})),store(r),window.location.href=config.site.baseurl+"/",null})});
+'use strict';
+jQuery(document).ready(function($) {
+  var initListGroup, refreshListGroup;
+  refreshListGroup = function(tableView, input) {
+    var value;
+    $(tableView + ' .list-group-item').removeClass('active');
+    value = $(input).val();
+    if (value) {
+      return _.find($(tableView + ' .list-group-item').get(), function(cell) {
+        if ($(cell).html() === value) {
+          $(cell).addClass('active');
+          return true;
+        }
+      });
+    }
+  };
+  initListGroup = function(tableView, input, key, def) {
+    $(input).val(store.get(key, def));
+    refreshListGroup(tableView, input);
+    return $(tableView + ' .list-group-item').click(function() {
+      $(input).val($(this).html());
+      return refreshListGroup(tableView, input);
+    });
+  };
+  initListGroup('#select-climate', '#climate', 'climate', 'Dry Summer - Wet Winter');
+  return $('#settings').submit(function(e) {
+    var elements, values;
+    e.preventDefault();
+    elements = $('#settings').serializeArray();
+    values = _.zipObject(_.map(elements, function(element) {
+      return [element.name, element.value];
+    }));
+    store(values);
+    window.location.href = config.site.baseurl + '/';
+    return null;
+  });
+});
