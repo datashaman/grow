@@ -135,8 +135,8 @@ Schedule = React.createClass
           [ ..., wikipedia ] = plant
 
           <li key={schedulePlant} className="list-group-item">
-            {if wikipedia then <a target="_blank" className="wikipedia" href={wikipedia}>
-            <span className="glyphicon glyphicon-info-sign pull-right"></span></a> else ''}
+            {if wikipedia then <a target="_blank" className="pull-right wikipedia" href={wikipedia}>
+            <img width="20" height="20" src="/images/icons/wikipedia.png" /></a> else ''}
             <span className="instruction pull-right">{config.instructions[instruction]}</span>
             <span className={'glyphicon glyphicon-' + @getGlyphiconByType(type)} aria-hidden="true"></span>
             {schedulePlant}
