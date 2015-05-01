@@ -27,6 +27,13 @@ gulp.task 'bower', ->
     .pipe plugins.changed 'build/bower_components'
     .pipe gulp.dest 'build/bower_components'
 
+gulp.task 'fonts', ->
+  gulp.src [
+      'bower_components/bootstrap/fonts/**/*'
+    ]
+    .pipe gulp.dest 'build/fonts'
+    .pipe reload stream: true
+
 gulp.task 'cjsx', ->
   gulp.src [
       'src/**/*.cjsx'
@@ -64,6 +71,7 @@ gulp.task 'sass', ->
     ]
     .pipe plugins.changed 'build', extension: '.css'
     .pipe plugins.sass outputStyle: 'compressed'
+    .pipe plugins.minifyCss()
     .pipe gulp.dest 'build'
     .pipe reload stream: true
 
@@ -84,12 +92,21 @@ gulp.task 'assets', [ 'build' ], ->
     .pipe assets root: 'build', config: config
     .pipe gulp.dest 'build'
 
-gulp.task 'minify-assets', ->
+gulp.task 'minify-css', ->
+  gulp.src [
+    'build/styles/**/*.css'
+    ]
+    .pipe plugins.minifyCss()
+    .pipe gulp.dest 'build/styles'
+
+gulp.task 'minify-js', ->
   gulp.src [
     'build/assets/**/*.js'
     ]
     .pipe plugins.uglify()
     .pipe gulp.dest 'build/assets'
+
+gulp.task 'minify-assets', [ 'minify-css', 'minify-js' ]
 
 gulp.task 'serve', ->
   bs = browserSync.create()
@@ -122,6 +139,6 @@ gulp.task 'components', [ 'bower' ]
 gulp.task 'content', [ 'markdown', 'swig' ]
 gulp.task 'scripts', [ 'cjsx' ]
 gulp.task 'styles', [ 'sass', 'less' ]
-gulp.task 'build', [ 'components', 'scripts', 'content', 'styles' ]
+gulp.task 'build', [ 'components', 'scripts', 'content', 'styles', 'fonts' ]
 gulp.task 'deploy', [ 'deploy-gh-pages' ]
 gulp.task 'default', [ 'build' ]
