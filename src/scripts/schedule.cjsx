@@ -148,10 +148,10 @@ Schedule = React.createClass
     <div>
       <div className="page-header">
         <div className="container">
-          <h2>{ @state.climate }</h2>
-          <div id="types" className="btn-group" role="toolbar" aria-label="plant types">
+          <div id="types" className="btn-group pull-right" role="toolbar" aria-label="plant types">
             { @renderTypes() }
           </div>
+          <h2>{ @state.climate }</h2>
         </div>
       </div>
 
