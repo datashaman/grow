@@ -108,9 +108,7 @@ gulp.task 'original-images', ->
 
     plantsSrc plants
       .pipe plugins.save 'pristine'
-      .pipe plugins.rename (path) ->
-        path.dirname += '/original'
-      .pipe gulp.dest 'src'
+      .pipe gulp.dest 'original'
 
       .pipe plugins.save.restore 'pristine'
       .pipe plugins.imageResize
@@ -126,7 +124,6 @@ gulp.task 'original-images', ->
 
 gulp.task 'images', ->
   gulp.src [
-        '!src/**/original/*.{png,gif,jpg}',
         'src/**/*.{png,gif,jpg}'
     ]
       .pipe gulp.dest 'build'
