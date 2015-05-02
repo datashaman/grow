@@ -1,3 +1,6 @@
+if window?
+  console.log window
+
 unless window?
   _ = require('lodash')
   request = require 'superagent'
@@ -21,8 +24,10 @@ generateSql = (climate, types, month) ->
   filters.push('Climate = \'' + climate + '\'')
   filters.push(month + ' NOT EQUAL TO \'\'')
 
-  'select Name, ' + month + ', Type FROM ' + config.services.google.tables.schedule +
-    ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name'
+  columns = [ 'Name', month, 'Type' ]
+
+  [ 'select ' + columns.join(', ') + ' FROM ' + config.services.google.tables.schedule +
+    ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name', columns ]
 
 responseHandler = (columns, cb) ->
   (err, resp) ->
@@ -38,12 +43,12 @@ responseHandler = (columns, cb) ->
     else
       cb 'resp not ok'
 
-@LibAPI =
+LibAPI =
   fetchData: (climate, types, month, cb) ->
-    fetchSchedule climate, types, month, (err, schedule) ->
+    LibAPI.fetchSchedule climate, types, month, (err, schedule) ->
       return cb(err) if err?
 
-      fetchPlants (err, plants) ->
+      LibAPI.fetchPlants (err, plants) ->
         return cb(err) if err?
 
         cb null,
@@ -66,4 +71,4 @@ responseHandler = (columns, cb) ->
       .query key: config.services.google.apiKey
       .end responseHandler columns, cb
 
-module.exports = @LibAPI if module?
+module.exports = LibAPI if module?

@@ -1,4 +1,6 @@
 _ = require 'lodash'
+browserify = require 'browserify'
+source = require 'vinyl-source-stream'
 request = require 'superagent'
 gulp = require 'gulp'
 fs = require 'fs'
@@ -50,6 +52,15 @@ gulp.task 'cjsx', ->
     .pipe gulp.dest 'build'
     .pipe reload stream: true
 
+gulp.task 'coffee', ->
+  gulp.src [
+      'src/**/*.coffee'
+    ]
+    .pipe plugins.changed 'build', extension: '.js'
+    .pipe plugins.coffee bare: true
+    .pipe gulp.dest 'build'
+    .pipe reload stream: true
+
 gulp.task 'markdown', ->
   gulp.src [
       'src/**/*.md'
@@ -91,18 +102,17 @@ gulp.task 'less', ->
     .pipe gulp.dest 'build'
     .pipe reload stream: true
 
-gulp.task 'images', ->
+gulp.task 'original-images', ->
   LibAPI.fetchPlants (err, plants) ->
     return console.error(err) if err?
 
     plantsSrc plants
+      .pipe plugins.save 'pristine'
       .pipe plugins.rename (path) ->
         path.dirname += '/original'
       .pipe gulp.dest 'src'
 
-      .pipe plugins.rename (path) ->
-        path.dirname = path.dirname.replace(/\/original$/, '')
-
+      .pipe plugins.save.restore 'pristine'
       .pipe plugins.imageResize
         width: 120
         height: 120
@@ -112,8 +122,11 @@ gulp.task 'images', ->
         format: 'png'
         filter: 'Catrom'
         sharpen: true
-
       .pipe gulp.dest 'src'
+
+gulp.task 'images', ->
+  gulp.src 'src/**/*.{png,gif,jpg}'
+      .pipe gulp.dest 'build'
 
 gulp.task 'assets', [ 'build' ], ->
   gulp.src [
@@ -158,6 +171,7 @@ gulp.task 'serve', ->
 
   gulp.watch 'bower_components/**/*', [ 'bower' ]
   gulp.watch 'src/**/*.cjsx', [ 'cjsx' ]
+  gulp.watch 'src/**/*.coffee', [ 'coffee' ]
   gulp.watch('src/**/*.md', [ 'markdown' ]).on('change', reload)
   gulp.watch([
     'src/**/*.html',
@@ -177,8 +191,19 @@ gulp.task 'build-gh-pages', [ 'clean' ], (cb) ->
 
 gulp.task 'components', [ 'bower' ]
 gulp.task 'content', [ 'markdown', 'swig' ]
-gulp.task 'scripts', [ 'cjsx' ]
+gulp.task 'scripts', [ 'cjsx', 'coffee' ]
 gulp.task 'styles', [ 'sass', 'less' ]
-gulp.task 'build', [ 'components', 'scripts', 'content', 'styles', 'images', 'fonts' ]
+gulp.task 'build', [ 'components', 'scripts', 'content', 'styles', 'fonts', 'images' ], (cb) ->
+  browserify('./build/scripts/slug.js')
+    .ignore('unicode/category/So')
+    .bundle()
+    .pipe source('scripts/slug.js')
+    .pipe gulp.dest './build'
+  browserify('./build/scripts/superagent.js')
+    .bundle()
+    .pipe source('scripts/superagent.js')
+    .pipe gulp.dest './build'
+  cb()
+
 gulp.task 'deploy', [ 'deploy-gh-pages' ]
 gulp.task 'default', [ 'build' ]

@@ -55,7 +55,7 @@ Schedule = React.createClass
   fetchData: ->
     @setState({ fetching: true })
 
-    Schedule.doFetchData @state.climate, @state.types, @state.month, (err, data) =>
+    LibAPI.fetchData @state.climate, @state.types, @state.month, (err, data) =>
       data.fetching = false
       @setState data
 
@@ -94,7 +94,7 @@ Schedule = React.createClass
           [ name, wikipedia, image, imageSource ] = plant
 
           <li key={name} className="list-group-item">
-            <img width="120" height="120" src={image } alt={ imageSource }/>
+            <img width="120" height="120" src={config.site.baseurl + '/images/plants/' + slug(name) + '.png'} alt={ imageSource }/>
             {if wikipedia then <a target="_blank" className="pull-right wikipedia" href={wikipedia}>
             <img width="20" height="20" src="/images/icons/wikipedia.png" /></a> else ''}
             <span className="instruction pull-right">{config.instructions[instruction]}</span>
