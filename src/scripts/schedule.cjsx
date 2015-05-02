@@ -1,45 +1,4 @@
 Schedule = React.createClass
-  statics:
-    generateSql: (climate, types, month) ->
-      filters = []
-
-      if types.length == 0
-        # If no types selected, no rows returned
-        filters = ['1 = 0']
-      else if types.length == config.types.length
-        # If all types selected, all rows returned (no filter)
-      else
-        # Filter one or the other type
-        filters = _.map types, (type) ->
-          'Type = \'' + type + '\''
-
-      filters.push('Climate = \'' + climate + '\'')
-      filters.push(month + ' NOT EQUAL TO \'\'')
-
-      'select Name, ' + month + ', Type FROM ' + config.services.google.tables.schedule +
-        ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name'
-
-    doFetchData: (climate, types, month, done) ->
-      $.ajax
-        dataType: 'json'
-        url: 'https://www.googleapis.com/fusiontables/v1/query'
-        data:
-          sql: Schedule.generateSql(climate, types, month)
-          key: config.services.google.apiKey
-      .done (scheduleResponse) =>
-        if scheduleResponse?
-          $.ajax
-            dataType: 'json'
-            url: 'https://www.googleapis.com/fusiontables/v1/query'
-            data:
-              sql: 'select Name, Wikipedia FROM ' + config.services.google.tables.plants + ' ORDER BY Name'
-              key: config.services.google.apiKey
-          .done (plantsResponse) ->
-              if plantsResponse?
-                done null,
-                  plants: plantsResponse.rows
-                  schedule: scheduleResponse.rows
-
   componentWillMount: ->
     @fetchData()
     null
@@ -132,14 +91,15 @@ Schedule = React.createClass
         plant = _.find @state.plants, (plant) -> plant[0] == schedulePlant
 
         if plant?
-          [ ..., wikipedia ] = plant
+          [ name, wikipedia, image, imageSource ] = plant
 
-          <li key={schedulePlant} className="list-group-item">
+          <li key={name} className="list-group-item">
+            <img width="120" height="120" src={image } alt={ imageSource }/>
             {if wikipedia then <a target="_blank" className="pull-right wikipedia" href={wikipedia}>
             <img width="20" height="20" src="/images/icons/wikipedia.png" /></a> else ''}
             <span className="instruction pull-right">{config.instructions[instruction]}</span>
             <span className={'glyphicon glyphicon-' + @getGlyphiconByType(type)} aria-hidden="true"></span>
-            {schedulePlant}
+            {name}
           </li>
         else
           ''

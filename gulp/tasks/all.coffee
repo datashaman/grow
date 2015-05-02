@@ -1,17 +1,22 @@
+_ = require 'lodash'
+request = require 'superagent'
 gulp = require 'gulp'
 fs = require 'fs'
 del = require 'del'
-yaml = require 'js-yaml'
+CSON = require 'cson'
 plugins = require('gulp-load-plugins')()
 index = require '../plugins/index'
 assets = require '../plugins/assets'
+plantsSrc = require '../plugins/plants-src'
 browserSync = require 'browser-sync'
 runSequence = require 'run-sequence'
+LibAPI = require '../../src/scripts/libapi'
 path = require 'path'
 reload = browserSync.reload
 swig = require 'swig'
 
-config = yaml.safeLoad fs.readFileSync 'config.yaml', 'utf8'
+config = CSON.requireFile 'src/config.cson'
+throw config if config instanceof Error
 
 swig.setDefaults loader: swig.loaders.fs('templates')
 
@@ -40,15 +45,6 @@ gulp.task 'cjsx', ->
     ]
     .pipe plugins.changed 'build', extension: '.js'
     .pipe plugins.cjsx bare: true
-    .pipe gulp.dest 'build'
-    .pipe reload stream: true
-
-gulp.task 'images', ->
-  gulp.src [
-      'src/**/*.{png,gif,jpg}'
-    ], base: 'src'
-    .pipe plugins.changed 'build'
-    .pipe plugins.imagemin()
     .pipe gulp.dest 'build'
     .pipe reload stream: true
 
@@ -87,10 +83,27 @@ gulp.task 'less', ->
   gulp.src [
       'src/**/*.less'
     ]
+    .pipe plugins.debug minimal: false
     .pipe plugins.changed 'build', extension: '.css'
     .pipe plugins.less compress: true
     .pipe gulp.dest 'build'
     .pipe reload stream: true
+
+gulp.task 'images', ->
+  LibAPI.fetchPlants (err, plants) ->
+    return console.error(err) if err?
+
+    plantsSrc plants
+      .pipe plugins.imageResize
+        width: 120
+        height: 120
+        upscale: false
+        crop: true
+        gravity: 'Center'
+        format: 'png'
+        filter: 'Catrom'
+        sharpen: true
+      .pipe gulp.dest 'src'
 
 gulp.task 'assets', [ 'build' ], ->
   gulp.src [
@@ -114,7 +127,16 @@ gulp.task 'minify-js', ->
     .pipe plugins.uglify()
     .pipe gulp.dest 'build/assets'
 
-gulp.task 'minify-assets', [ 'minify-css', 'minify-js' ]
+gulp.task 'minify-images', ->
+  gulp.src [
+      'src/**/*.{png,gif,jpg}'
+    ], base: 'src'
+    .pipe plugins.changed 'build'
+    .pipe plugins.imagemin()
+    .pipe gulp.dest 'build'
+    .pipe reload stream: true
+
+gulp.task 'minify-assets', [ 'minify-css', 'minify-js', 'minify-images' ]
 
 gulp.task 'serve', ->
   bs = browserSync.create()
