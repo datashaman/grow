@@ -58,7 +58,6 @@ LibAPI =
   fetchSchedule: (climate, types, month, cb) ->
     [ sql, columns ] = generateSql(climate, types, month)
     request.get 'https://www.googleapis.com/fusiontables/v1/query'
-      .set 'Referer', config.site.url
       .query sql: sql
       .query key: config.services.google.apiKey
       .end responseHandler columns, cb
@@ -66,7 +65,6 @@ LibAPI =
   fetchPlants: (cb) ->
     columns = [ 'Name', 'Wikipedia', 'Image', 'ImageSource' ]
     request.get 'https://www.googleapis.com/fusiontables/v1/query'
-      .set 'Referer', config.site.url
       .query sql: 'select ' + columns.join(', ') + ' FROM ' + config.services.google.tables.plants + ' ORDER BY Name'
       .query key: config.services.google.apiKey
       .end responseHandler columns, cb
