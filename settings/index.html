@@ -24,7 +24,10 @@
     
 
     <!--[if lt IE 9]>
-    <script defer src="/grow/assets/ie.js"></script>
+    <!-- build:js /assets/ie.js -->
+    <script src="/grow/bower_components/html5shiv/dist/html5shiv.min.js"></script>
+    <script src="/grow/bower_components/respond/dest/respond.min.js"></script>
+    <!-- endbuild -->
     <![endif]-->
 </head>
 
@@ -95,7 +98,12 @@
     <script defer src="/grow/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     
-    <script defer src="/grow/assets/settings.js"></script>
+    <!-- build:js /assets/settings.js -->
+    <script defer src="/grow/bower_components/store/dist/store2.js"></script>
+    <script defer src="/grow/bower_components/lodash/lodash.js"></script>
+    <script defer src="/grow/scripts/settings.js"></script>
+    
+    <!-- endbuild -->
     
 </body>
 
