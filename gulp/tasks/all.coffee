@@ -125,7 +125,10 @@ gulp.task 'original-images', ->
       .pipe gulp.dest 'src'
 
 gulp.task 'images', ->
-  gulp.src 'src/**/*.{png,gif,jpg}'
+  gulp.src [
+        '!src/**/original/*.{png,gif,jpg}',
+        'src/**/*.{png,gif,jpg}'
+    ]
       .pipe gulp.dest 'build'
 
 gulp.task 'assets', [ 'build' ], ->
@@ -187,7 +190,8 @@ gulp.task 'deploy-gh-pages', [ 'build-gh-pages' ], ->
 gulp.task 'build-gh-pages', [ 'clean' ], (cb) ->
   config.site.url = 'http://datashaman.github.io'
   config.site.baseurl = '/grow'
-  runSequence 'assets', 'minify-assets', cb
+  # runSequence 'assets', 'minify-assets', cb
+  runSequence 'build', 'minify-assets', cb
 
 gulp.task 'components', [ 'bower' ]
 gulp.task 'content', [ 'markdown', 'swig' ]
