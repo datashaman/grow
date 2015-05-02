@@ -144,7 +144,11 @@ Schedule = React.createClass({
               "target": "_blank",
               "className": "pull-right wikipedia",
               "href": wikipedia
-            }, "\x3Cimg width=\"20\" height=\"20\" src=\"", config.site.baseurl + "/images/icons/wikipedia.png", "\" \x2F\x3E") : ''), React.createElement("span", {
+            }, React.createElement("img", {
+              "width": "20",
+              "height": "20",
+              "src": config.site.baseurl + "/images/icons/wikipedia.png"
+            })) : ''), React.createElement("span", {
               "className": "instruction pull-right"
             }, config.instructions[instruction]), React.createElement("span", {
               "className": 'glyphicon glyphicon-' + _this.getGlyphiconByType(type),
