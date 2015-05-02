@@ -1,54 +1,6 @@
 var Schedule;
 
 Schedule = React.createClass({
-  statics: {
-    generateSql: function(climate, types, month) {
-      var filters;
-      filters = [];
-      if (types.length === 0) {
-        filters = ['1 = 0'];
-      } else if (types.length === config.types.length) {
-
-      } else {
-        filters = _.map(types, function(type) {
-          return 'Type = \'' + type + '\'';
-        });
-      }
-      filters.push('Climate = \'' + climate + '\'');
-      filters.push(month + ' NOT EQUAL TO \'\'');
-      return 'select Name, ' + month + ', Type FROM ' + config.services.google.tables.schedule + ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name';
-    },
-    doFetchData: function(climate, types, month, done) {
-      return $.ajax({
-        dataType: 'json',
-        url: 'https://www.googleapis.com/fusiontables/v1/query',
-        data: {
-          sql: Schedule.generateSql(climate, types, month),
-          key: config.services.google.apiKey
-        }
-      }).done((function(_this) {
-        return function(scheduleResponse) {
-          if (scheduleResponse != null) {
-            return $.ajax({
-              dataType: 'json',
-              url: 'https://www.googleapis.com/fusiontables/v1/query',
-              data: {
-                sql: 'select Name, Wikipedia FROM ' + config.services.google.tables.plants + ' ORDER BY Name',
-                key: config.services.google.apiKey
-              }
-            }).done(function(plantsResponse) {
-              if (plantsResponse != null) {
-                return done(null, {
-                  plants: plantsResponse.rows,
-                  schedule: scheduleResponse.rows
-                });
-              }
-            });
-          }
-        };
-      })(this));
-    }
-  },
   componentWillMount: function() {
     this.fetchData();
     return null;
@@ -120,7 +72,7 @@ Schedule = React.createClass({
     this.setState({
       fetching: true
     });
-    return Schedule.doFetchData(this.state.climate, this.state.types, this.state.month, (function(_this) {
+    return LibAPI.fetchData(this.state.climate, this.state.types, this.state.month, (function(_this) {
       return function(err, data) {
         data.fetching = false;
         return _this.setState(data);
@@ -173,28 +125,35 @@ Schedule = React.createClass({
     } else {
       return _.map(this.state.schedule, (function(_this) {
         return function(schedule) {
-          var instruction, plant, schedulePlant, type, wikipedia;
+          var image, imageSource, instruction, name, plant, schedulePlant, type, wikipedia;
           schedulePlant = schedule[0], instruction = schedule[1], type = schedule[2];
           plant = _.find(_this.state.plants, function(plant) {
             return plant[0] === schedulePlant;
           });
           if (plant != null) {
-            wikipedia = plant[plant.length - 1];
+            name = plant[0], wikipedia = plant[1], image = plant[2], imageSource = plant[3];
             return React.createElement("li", {
-              "key": schedulePlant,
+              "key": name,
               "className": "list-group-item"
-            }, (wikipedia ? React.createElement("a", {
+            }, React.createElement("img", {
+              "width": "120",
+              "height": "120",
+              "src": config.site.baseurl + '/images/plants/' + slug(name) + '.png',
+              "alt": imageSource
+            }), (wikipedia ? React.createElement("a", {
               "target": "_blank",
-              "className": "wikipedia",
+              "className": "pull-right wikipedia",
               "href": wikipedia
-            }, React.createElement("span", {
-              "className": "glyphicon glyphicon-info-sign pull-right"
+            }, React.createElement("img", {
+              "width": "20",
+              "height": "20",
+              "src": "/images/icons/wikipedia.png"
             })) : ''), React.createElement("span", {
               "className": "instruction pull-right"
             }, config.instructions[instruction]), React.createElement("span", {
               "className": 'glyphicon glyphicon-' + _this.getGlyphiconByType(type),
               "aria-hidden": "true"
-            }), schedulePlant);
+            }), name);
           } else {
             return '';
           }
