@@ -23,7 +23,7 @@ module.exports = (plants) ->
         else
           stream.write
             base: path.resolve 'src'
-            path: path.resolve 'src/images/plants/' + slug(plant.name) + path.extname(plant.image)
+            path: path.resolve 'src/images/plants/' + slug(plant.name) + path.extname(plant.image).toLowerCase()
             contents: resp.body
         cb()
 

@@ -14,6 +14,8 @@ LibAPI = require '../../src/scripts/libapi'
 path = require 'path'
 reload = browserSync.reload
 swig = require 'swig'
+slug = require 'slug'
+slug.defaults.mode = 'rfc3986'
 
 config = CSON.requireFile 'src/config.cson'
 throw config if config instanceof Error
@@ -94,6 +96,13 @@ gulp.task 'images', ->
     return console.error(err) if err?
 
     plantsSrc plants
+      .pipe plugins.rename (path) ->
+        path.dirname += '/original'
+      .pipe gulp.dest 'src'
+
+      .pipe plugins.rename (path) ->
+        path.dirname = path.dirname.replace(/\/original$/, '')
+
       .pipe plugins.imageResize
         width: 120
         height: 120
@@ -103,6 +112,7 @@ gulp.task 'images', ->
         format: 'png'
         filter: 'Catrom'
         sharpen: true
+
       .pipe gulp.dest 'src'
 
 gulp.task 'assets', [ 'build' ], ->
