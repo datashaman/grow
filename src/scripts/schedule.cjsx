@@ -96,7 +96,7 @@ Schedule = React.createClass
           <li key={name} className="list-group-item">
             <img width="120" height="120" src={config.site.baseurl + '/images/plants/' + slug(name) + '.png'} alt={ imageSource }/>
             {if wikipedia then <a target="_blank" className="pull-right wikipedia" href={wikipedia}>
-            <img width="20" height="20" src="/images/icons/wikipedia.png" /></a> else ''}
+            <img width="20" height="20" src={config.site.baseurl + "/images/icons/wikipedia.png"} /></a> else ''}
             <span className="instruction pull-right">{config.instructions[instruction]}</span>
             <span className={'glyphicon glyphicon-' + @getGlyphiconByType(type)} aria-hidden="true"></span>
             {name}
