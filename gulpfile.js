@@ -215,7 +215,7 @@ gulp.task('minify-images', function() {
     }));
 });
 
-gulp.task('minify-assets', ['minify-css', 'minify-js', 'minify-images']);
+gulp.task('minify-assets', ['minify-css', 'minify-images']);
 
 gulp.task('serve', function() {
   var bs = browserSync.create();
@@ -251,32 +251,31 @@ gulp.task('components', ['bower']);
 
 gulp.task('content', ['markdown', 'swig']);
 
-gulp.task('scripts', ['browserify']);
-
 gulp.task('styles', ['sass', 'less']);
 
 gulp.task('build', ['components', 'scripts', 'content', 'styles', 'fonts', 'images']);
 
-gulp.task('browserify', function() {
-  return del(['./build/scripts/index.js', './build/scripts/settings.js'], function() {
-    var settings;
+gulp.task('scripts', function() {
+  var index, settings;
 
-    index = browserify('./src/scripts/index.jsx').bundle()
+  index = browserify('./src/scripts/index.jsx')
+    .ignore('unicode/category/So')
+    .bundle()
 
-    index
-      .pipe(source('index.js'))
-      .pipe(plugins.streamify(plugins.uglify()))
-      .pipe(gulp.dest('build/scripts'));
+  index
+    .pipe(source('index.js'))
+    .pipe(plugins.streamify(plugins.uglify()))
+    .pipe(gulp.dest('build/scripts'));
 
-    settings = browserify('./src/scripts/settings.js').bundle()
+  settings = browserify('./src/scripts/settings.js')
+    .bundle()
 
-    settings
-      .pipe(source('settings.js'))
-      .pipe(plugins.streamify(plugins.uglify()))
-      .pipe(gulp.dest('build/scripts'));
+  settings
+    .pipe(source('settings.js'))
+    .pipe(plugins.streamify(plugins.uglify()))
+    .pipe(gulp.dest('build/scripts'));
 
-    return es.concat(index, settings);
-  });
+  return es.concat(index, settings);
 });
 
 gulp.task('deploy', ['deploy-gh-pages']);

@@ -117,7 +117,7 @@ Schedule = React.createClass({
           if (plant != null) {
             name = plant[0], wikipedia = plant[1], image = plant[2], imageSource = plant[3];
             return (<li key={name} className="list-group-item">
-              <img width="120" height="120" src={config.site.baseurl + '/images/plants/' + slug(name) + '.png'} alt={ imageSource }/>
+              <img width="120" height="120" src={config.site.baseurl + '/images/plants/' + slug(name) + '.png'} title={ imageSource }/>
               {wikipedia
                 ? <a target="_blank" className="pull-right wikipedia" href={wikipedia}>
                     <img width="20" height="20" src={config.site.baseurl + "/images/icons/wikipedia.png"} />
