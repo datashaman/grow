@@ -1,1 +1,0 @@
-window.request = require 'superagent'
