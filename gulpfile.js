@@ -261,14 +261,18 @@ gulp.task('browserify', function() {
   return del(['./build/scripts/index.js', './build/scripts/settings.js'], function() {
     var settings;
 
-    index = browserify('./src/scripts/index.jsx')
-      .bundle()
+    index = browserify('./src/scripts/index.jsx').bundle()
+
+    index
       .pipe(source('index.js'))
+      .pipe(plugins.streamify(plugins.uglify()))
       .pipe(gulp.dest('build/scripts'));
 
-    settings = browserify('./src/scripts/settings.js')
-      .bundle()
+    settings = browserify('./src/scripts/settings.js').bundle()
+
+    settings
       .pipe(source('settings.js'))
+      .pipe(plugins.streamify(plugins.uglify()))
       .pipe(gulp.dest('build/scripts'));
 
     return es.concat(index, settings);

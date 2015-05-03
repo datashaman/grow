@@ -1,5 +1,8 @@
 'use strict';
 
+var store = require('store2');
+var _ = require('lodash');
+
 r(function() {
   var initListGroup, refreshListGroup;
 
