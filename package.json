@@ -8,16 +8,14 @@
   },
   "browserify": {
     "transform": [
-      "browserify-shim",
       [
         "reactify",
         {
-          "es6": true
+          "harmony": true
         }
-      ]
-    ],
-    "extension": [
-      ".jsx"
+      ],
+      "envify",
+      "browserify-shim"
     ]
   },
   "browserify-shim": {
@@ -28,8 +26,13 @@
     "browserify": "^10.0.0",
     "browserify-shim": "^3.8.6",
     "component-emitter": "^1.2.0",
+    "cookie": "^0.1.2",
+    "cookies-js": "^1.2.1",
     "del": "^1.1.1",
     "emitter": "0.0.1",
+    "envify": "^3.4.0",
+    "eventemitter2": "^0.4.14",
+    "flux": "^2.0.3",
     "gulp": "^3.8.11",
     "gulp-changed": "^1.2.1",
     "gulp-concat": "^2.5.2",
@@ -47,10 +50,12 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^1.3.3",
     "gulp-save": "^1.0.4",
+    "gulp-sourcemaps": "^1.5.2",
     "gulp-streamify": "0.0.5",
     "gulp-swig": "^0.7.4",
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.4",
+    "immutable": "^3.7.2",
     "lodash": "^3.8.0",
     "node-sass": "^2.1.1",
     "react": "^0.13.2",
@@ -62,11 +67,14 @@
     "slug": "^0.9.1",
     "spin.js": "^2.1.0",
     "store2": "^2.2.0",
+    "streamify": "^0.2.4",
     "superagent": "^1.2.0",
     "swig": "^1.4.2",
     "through2": "^0.6.5",
     "vinyl": "^0.4.6",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "vinyl-transform": "^1.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

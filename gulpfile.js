@@ -1,17 +1,21 @@
 'use strict';
 
+var reactify = require('reactify');
 var _ = require('lodash');
-var assets = require('./gulp/plugins/assets');
+var gutil = require('gulp-util');
 var browserify = require('browserify');
+var browserifyShim = require('browserify-shim');
+var envify = require('envify');
 var browserSync = require('browser-sync');
 var del = require('del');
 var es = require('event-stream');
 var fs = require('fs');
 var gulp = require('gulp');
+var assets = require('./gulp/plugins/assets');
 var index = require('./gulp/plugins/index');
-var libapi = require('./src/scripts/libapi');
-var path = require('path');
 var plantsSrc = require('./gulp/plugins/plants-src');
+var LibAPI = require('./src/scripts/libapi.jsx');
+var path = require('path');
 var plugins = require('gulp-load-plugins')();
 var reload = browserSync.reload;
 var request = require('superagent');
@@ -19,9 +23,10 @@ var requireDir = require('require-dir');
 var runSequence = require('run-sequence');
 var slug = require('slug');
 var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var swig = require('swig');
 
-var config = require('./src/scripts/config');
+var config = require('./src/scripts/config.jsx')();
 
 slug.defaults.mode = 'rfc3986';
 
@@ -30,11 +35,11 @@ swig.setDefaults({
 });
 
 swig.setFilter('baseurl', function(input) {
-  return config.site.baseurl + input;
+  return config.getIn(['site','baseurl']) + input;
 });
 
 swig.setFilter('absolute', function(input) {
-  return config.site.url + config.site.baseurl + input;
+  return config.getIn(['site','url']) + config.getIn(['site','baseurl']) + input;
 });
 
 swig.setFilter('truncate', function(input, maxlength) {
@@ -145,7 +150,7 @@ gulp.task('less', function() {
 });
 
 gulp.task('original-images', function() {
-  return libapi.fetchPlants(function(err, plants) {
+  return LibAPI.fetchPlants(function(err, plants) {
     if (err != null) {
       return console.error(err);
     }
@@ -228,7 +233,7 @@ gulp.task('serve', function() {
   });
 
   gulp.watch('bower_components/**/*', ['bower']);
-  gulp.watch('src/**/*.{js,jsx}', ['browserify']).on('change', reload);
+  gulp.watch('src/**/*.{js,jsx}', ['scripts']).on('change', reload);
   gulp.watch('src/**/*.md', ['markdown']).on('change', reload);
   gulp.watch(['src/**/*.html', 'templates/**/*.html'], ['swig']).on('change', reload);
   gulp.watch('src/**/*.{sass,scss}', ['sass']);
@@ -242,8 +247,6 @@ gulp.task('deploy-gh-pages', ['build-gh-pages'], function() {
 });
 
 gulp.task('build-gh-pages', ['clean'], function(cb) {
-  config.site.url = 'http://datashaman.github.io';
-  config.site.baseurl = '/grow';
   return runSequence('build', 'minify-assets', cb);
 });
 
@@ -256,26 +259,29 @@ gulp.task('styles', ['sass', 'less']);
 gulp.task('build', ['components', 'scripts', 'content', 'styles', 'fonts', 'images']);
 
 gulp.task('scripts', function() {
-  var index, settings;
+  var browserifyFile = function(file) {
+    var b = browserify(file.src, {
+      extensions: [ '.jsx' ],
+      debug: true
+    });
 
-  index = browserify('./src/scripts/index.jsx')
-    .ignore('unicode/category/So')
-    .bundle()
+    b.ignore('unicode/category/So');
 
-  index
-    .pipe(source('index.js'))
-    .pipe(plugins.streamify(plugins.uglify()))
-    .pipe(gulp.dest('build/scripts'));
+    return b.bundle()
+      .pipe(source(file.dest))
+      .pipe(gulp.dest('build/scripts'));
+  };
 
-  settings = browserify('./src/scripts/settings.js')
-    .bundle()
+  var files = [
+    { src: './src/scripts/index.jsx', dest: 'index.js' },
+    { src: './src/scripts/settings.jsx', dest: 'settings.js' }
+  ];
 
-  settings
-    .pipe(source('settings.js'))
-    .pipe(plugins.streamify(plugins.uglify()))
-    .pipe(gulp.dest('build/scripts'));
+  return browserifyFile(files[0]);
 
-  return es.concat(index, settings);
+  var streams = files.map(browserifyFile);
+
+  return streams[0];
 });
 
 gulp.task('deploy', ['deploy-gh-pages']);

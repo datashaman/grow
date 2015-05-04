@@ -38,18 +38,19 @@ module.exports = function(opt) {
 
       if (match != null) {
         pushOutputPath = function(reg, fragment, outputPath) {
-            var contents = [], m, newFile, thisPath;
+            var contents = new Buffer(), m, newFile, thisPath;
 
             while (m = reg.exec(fragment)) {
               thisPath = m[2];
               thisPath = thisPath.replace(opt.config.site.baseurl, '');
-              contents.push(fs.readFileSync(cwd + thisPath));
+              contents.write(fs.readFileSync(cwd + thisPath));
+              contents.write('\n');
             }
 
             newFile = new File({
               cwd: cwd,
               path: outputPath,
-              contents: new Buffer(contents.join('\n'))
+              contents: contents
             });
 
             return _this.push(newFile);

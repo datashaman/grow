@@ -1,15 +1,16 @@
 var _ = require('lodash');
+var Actions = require('./actions.jsx');
 var request = require('superagent');
-var config = require('./config');
+var config = require('./config.jsx')();
 
 var generateSql = function(climate, types, month) {
   var columns, filters = [];
 
-  if (types.length === 0) {
+  if (types.size === 0) {
     filters = ['1 = 0'];
-  } else if (types.length === config.types.length) {
+  } else if (types.size === config.get('types').size) {
   } else {
-    filters = _.map(types, function(type) {
+    filters = types.map(function(type) {
       return 'Type = \'' + type + '\'';
     });
   }
@@ -18,7 +19,7 @@ var generateSql = function(climate, types, month) {
   filters.push(month + ' NOT EQUAL TO \'\'');
 
   columns = ['Name', month, 'Type'];
-  return ['select ' + columns.join(', ') + ' FROM ' + config.services.google.tables.schedule +
+  return ['select ' + columns.join(', ') + ' FROM ' + config.getIn([ 'services', 'google', 'tables', 'schedule']) +
     ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name', columns];
 };
 
@@ -45,29 +46,12 @@ var responseHandler = function(columns, cb) {
 };
 
 LibAPI = {
-  fetchData: function(climate, types, month, cb) {
-    return LibAPI.fetchSchedule(climate, types, month, function(err, schedule) {
-      if (err != null) {
-        return cb(err);
-      }
-      return LibAPI.fetchPlants(function(err, plants) {
-        if (err != null) {
-          return cb(err);
-        }
-        return cb(null, {
-          schedule: schedule,
-          plants: plants
-        });
-      });
-    });
-  },
-
   fetchSchedule: function(climate, types, month, cb) {
     var columns, ref, sql;
     ref = generateSql(climate, types, month), sql = ref[0], columns = ref[1];
     return request.get('https://www.googleapis.com/fusiontables/v1/query')
       .query({ sql: sql })
-      .query({ key: config.services.google.apiKey })
+      .query({ key: config.getIn(['services','google','apiKey']) })
       .end(responseHandler(columns, cb));
   },
 
@@ -75,8 +59,8 @@ LibAPI = {
     var columns;
     columns = ['Name', 'Wikipedia', 'Image', 'ImageSource'];
     return request.get('https://www.googleapis.com/fusiontables/v1/query')
-      .query({ sql: 'select ' + columns.join(', ') + ' FROM ' + config.services.google.tables.plants + ' ORDER BY Name' })
-      .query({ key: config.services.google.apiKey })
+      .query({ sql: 'select ' + columns.join(', ') + ' FROM ' + config.getIn(['services','google','tables','plants']) + ' ORDER BY Name' })
+      .query({ key: config.getIn(['services','google','apiKey']) })
       .end(responseHandler(columns, cb));
   }
 };
