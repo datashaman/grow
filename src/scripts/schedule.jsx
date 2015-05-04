@@ -98,6 +98,8 @@ var Schedule = React.createClass({
     }.bind(this));
   },
   renderPlants: function() {
+    var baseurl = config.get('site').get('baseurl');
+    var instructions = config.get('instructions');
     var schedule = this.state.data.get('schedule');
     var plants = this.state.data.get('plants');
     return schedule
@@ -110,13 +112,13 @@ var Schedule = React.createClass({
           if (plant != null) {
             name = plant.get(0), wikipedia = plant.get(1), image = plant.get(2), imageSource = plant.get(3);
             return (<li key={name} className="list-group-item">
-              <img width="120" height="120" src={config.get('site').get('baseurl') + '/images/plants/' + slug(name) + '.png'} title={ imageSource }/>
+              <img width="120" height="120" src={baseurl + '/images/plants/' + slug(name) + '.png'} title={ imageSource }/>
               {wikipedia
                 ? <a target="_blank" className="pull-right wikipedia" href={wikipedia}>
-                    <img width="20" height="20" src={config.get('site').get('baseurl') + "/images/icons/wikipedia.png"} />
+                    <img width="20" height="20" src={baseurl + "/images/icons/wikipedia.png"} />
                   </a>
                 : ''}
-              <span className="instruction pull-right">{config.get('instructions').get(instruction)}</span>
+              <span className="instruction pull-right">{instructions.get(instruction)}</span>
               <span className={'glyphicon glyphicon-' + this.getGlyphiconByType(type)} aria-hidden="true"></span>
               {name}
             </li>);
@@ -133,7 +135,7 @@ var Schedule = React.createClass({
           <div id="types" className="btn-group pull-right" role="toolbar" aria-label="plant types">
             { this.renderTypes() }
           </div>
-          <h2>{ this.state.climate }</h2>
+          <h2>{ this.state.data.get('climate') }</h2>
         </div>
       </div>
 

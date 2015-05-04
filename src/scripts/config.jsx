@@ -29,13 +29,11 @@ module.exports = function() {
         icon: 'cutlery'
       }
     ],
-    instructions: [
-      {
-        P: 'Plant / Sow',
-        ST: 'Seed Tray',
-        TS: 'Transplant Seedlings'
-      }
-    ],
+    instructions: {
+      P: 'Plant / Sow',
+      ST: 'Seed Tray',
+      TS: 'Transplant Seedlings'
+    },
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     services: {
       google: {
