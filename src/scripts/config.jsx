@@ -8,8 +8,8 @@ module.exports = function() {
       title: 'Grow',
       email: 'marlinf@datashaman.com',
       description: 'Planting schedule for South African fruit, vegetables and herbs.',
-      url: process.env.SITE_URL,
-      baseurl: process.env.SITE_BASEURL
+      url: process.env.SITE_URL || 'http://localhost:3000',
+      baseurl: process.env.SITE_BASEURL || ''
     },
     navbar: [
       {

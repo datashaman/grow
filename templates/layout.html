@@ -43,7 +43,7 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                  {% for item in config.navbar %}
+                  {% for item in config.get('navbar') %}
                   <li
                   {% if item.url == url %}
                   class="active"

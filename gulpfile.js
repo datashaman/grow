@@ -277,11 +277,7 @@ gulp.task('scripts', function() {
     { src: './src/scripts/settings.jsx', dest: 'settings.js' }
   ];
 
-  return browserifyFile(files[0]);
-
-  var streams = files.map(browserifyFile);
-
-  return streams[0];
+  return es.merge(files.map(browserifyFile));
 });
 
 gulp.task('deploy', ['deploy-gh-pages']);

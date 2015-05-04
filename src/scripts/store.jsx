@@ -76,6 +76,7 @@ AppDispatcher.register((action) => {
       break;
     case constants.SET_CLIMATE:
       data = data.set('climate', action.climate);
+      Cookies.set('climate', action.climate);
       fetchSchedule(function(err) {
         if (err != null) { return console.error(err); }
         Store.emitChange();
@@ -83,6 +84,7 @@ AppDispatcher.register((action) => {
       break;
     case constants.SET_TYPES:
       data = data.set('types', Immutable.fromJS(action.types));
+      Cookies.set('types', JSON.stringify(action.types));
       fetchSchedule(function(err) {
         if (err != null) { return console.error(err); }
         Store.emitChange();
