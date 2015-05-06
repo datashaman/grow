@@ -19579,8 +19579,8 @@ module.exports = function() {
       title: 'Grow',
       email: 'marlinf@datashaman.com',
       description: 'Planting schedule for South African fruit, vegetables and herbs.',
-      url: "http://localhost:3000" || 'http://localhost:3000',
-      baseurl: "" || ''
+      url: "http://datashaman.grow.io" || 'http://localhost:3000',
+      baseurl: "/grow" || ''
     },
     navbar: [
       {
