@@ -51,11 +51,8 @@ var Index = React.createClass({
       e.preventDefault();
 
       var types = this.state.data.get('types');
-      Immutable.Map.isMap(types);
-      return false;
+      var pos = types.indexOf(type);
 
-      var pos;
-      pos = types.indexOf(type);
       if (pos === -1) {
         types.push(type);
       } else {
@@ -64,6 +61,7 @@ var Index = React.createClass({
         }
         types.splice(pos, 1);
       }
+
       Actions.setTypes(types);
     }.bind(this);
   },

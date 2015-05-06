@@ -160,6 +160,7 @@ gulp.task('original-images', function() {
 gulp.task('images', function() {
   return gulp
     .src(['src/**/*.{png,gif,jpg}'])
+    .pipe(plugins.imagemin())
     .pipe(gulp.dest('build'));
 });
 
@@ -254,6 +255,8 @@ gulp.task('scripts', function() {
 
     return b.bundle()
       .pipe(source(file.dest))
+      .pipe(buffer())
+      .pipe(plugins.uglify())
       .pipe(gulp.dest('build/scripts'));
   };
 
