@@ -14,7 +14,7 @@ var gulp = require('gulp');
 var assets = require('./gulp/plugins/assets');
 var index = require('./gulp/plugins/index');
 var plantsSrc = require('./gulp/plugins/plants-src');
-var LibAPI = require('./src/scripts/libapi.jsx');
+var LibAPI = require('./src/scripts/flux/libapi.jsx');
 var path = require('path');
 var plugins = require('gulp-load-plugins')();
 var reload = browserSync.reload;
@@ -65,21 +65,6 @@ gulp.task('fonts', function() {
     }));
 });
 
-gulp.task('jsx', function() {
-  return gulp
-    .src(['src/**/*.jsx'])
-    .pipe(plugins.changed('build', {
-      extension: '.js'
-    }))
-    .pipe(plugins.jsx({
-      factory: 'React.createElement'
-    }))
-    .pipe(gulp.dest('build'))
-    .pipe(reload({
-      stream: true
-    }));
-});
-
 gulp.task('markdown', function() {
   return gulp
     .src(['src/**/*.md'])
@@ -106,7 +91,7 @@ gulp.task('swig', function() {
       property: 'data'
     }))
     .pipe(plugins.data({
-      config: config
+      config: config.toJS()
     }))
     .pipe(index({
       root: 'src'

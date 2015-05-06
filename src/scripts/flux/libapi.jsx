@@ -1,7 +1,9 @@
+'use strict';
+
 var _ = require('lodash');
-var Actions = require('./actions.jsx');
 var request = require('superagent');
-var config = require('./config.jsx')();
+
+var config = require('../config.jsx')();
 
 var generateSql = function(climate, types, month) {
   var columns, filters = [];
@@ -45,7 +47,7 @@ var responseHandler = function(columns, cb) {
   };
 };
 
-LibAPI = {
+var LibAPI = {
   fetchSchedule: function(climate, types, month, cb) {
     var columns, ref, sql;
     ref = generateSql(climate, types, month), sql = ref[0], columns = ref[1];

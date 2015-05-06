@@ -4,14 +4,17 @@ var _ = require('lodash');
 var React = require('react');
 var slug = require('slug');
 var Spinner = require('spin.js');
-var LibAPI = require('./libapi.jsx');
-var config = require('./config.jsx')();
-var Actions = require('./actions.jsx');
-var Store = require('./store.jsx');
+var Immutable = require('immutable');
+
+var LibAPI = require('../flux/libapi.jsx');
+var Actions = require('../flux/actions.jsx');
+var Store = require('../flux/store.jsx');
+
+var config = require('../config.jsx')();
 
 slug.defaults.mode = 'rfc3986';
 
-var Schedule = React.createClass({
+var Index = React.createClass({
   componentWillMount: function() {
     Store.addChangeListener(this._onChange);
   },
@@ -45,9 +48,13 @@ var Schedule = React.createClass({
   },
   handleTypeClick: function(type) {
     return function(e) {
-      var types = this.state.data.get('types').toJS();
-      var pos;
       e.preventDefault();
+
+      var types = this.state.data.get('types');
+      Immutable.Map.isMap(types);
+      return false;
+
+      var pos;
       pos = types.indexOf(type);
       if (pos === -1) {
         types.push(type);
@@ -57,7 +64,6 @@ var Schedule = React.createClass({
         }
         types.splice(pos, 1);
       }
-      console.log(types);
       Actions.setTypes(types);
     }.bind(this);
   },
@@ -150,4 +156,4 @@ var Schedule = React.createClass({
   }
 });
 
-module.exports = Schedule;
+module.exports = Index;

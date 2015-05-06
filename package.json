@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "browser": {
-    "jquery": "./bower_components/jquery/dist/jquery.js"
-  },
   "browserify": {
     "transform": [
       [
@@ -19,7 +16,8 @@
     ]
   },
   "browserify-shim": {
-    "jquery": "$"
+    "jquery": "global:jQuery",
+    "react": "global:React"
   },
   "devDependencies": {
     "browser-sync": "^2.6.5",
@@ -32,6 +30,7 @@
     "emitter": "0.0.1",
     "envify": "^3.4.0",
     "eventemitter2": "^0.4.14",
+    "event-stream": "^3.3.0",
     "flux": "^2.0.3",
     "gulp": "^3.8.11",
     "gulp-changed": "^1.2.1",
@@ -88,9 +87,5 @@
   "bugs": {
     "url": "https://github.com/datashaman/grow/issues"
   },
-  "homepage": "https://github.com/datashaman/grow",
-  "dependencies": {
-    "event-stream": "^3.3.0",
-    "gulp-git": "^1.2.1"
-  }
+  "homepage": "https://github.com/datashaman/grow"
 }

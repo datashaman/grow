@@ -1,10 +1,10 @@
 'use strict';
 
 var React = require('react');
-var Actions = require('./actions.jsx');
-var Schedule = require('./schedule.jsx');
+var Actions = require('./flux/actions.jsx');
+var Index = require('./components/index.jsx');
 
 r(() => {
   Actions.fetchData();
-  React.render(<Schedule />, document.getElementById('schedule'));
+  React.render(<Index />, document.getElementById('index'));
 });

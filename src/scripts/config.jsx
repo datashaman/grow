@@ -20,6 +20,10 @@ module.exports = function() {
         title: 'Settings'
       }
     ],
+    climates: [
+      'Dry Summer - Wet Winter',
+      'Wet Summer - Dry Winter'
+    ],
     types: [
       {
         title: 'Herb',

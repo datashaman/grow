@@ -1,4 +1,5 @@
 var Immutable = require('immutable');
+
 var AppDispatcher = require('./dispatcher.jsx');
 var Constants = require('./constants.jsx');
 

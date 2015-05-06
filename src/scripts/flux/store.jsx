@@ -1,10 +1,15 @@
+'use strict';
+
 var _ = require('lodash');
-var constants = require('./constants.jsx');
-var config = require('./config.jsx')();
 var Cookies = require('cookies-js');
 var Immutable = require('immutable');
-var AppDispatcher = require('./dispatcher.jsx');
 var { EventEmitter2 } = require('eventemitter2');
+
+var config = require('../config.jsx')();
+
+var constants = require('./constants.jsx');
+var AppDispatcher = require('./dispatcher.jsx');
+var LibAPI = require('./libapi.jsx');
 
 var types = Cookies.get('types');
 if (types) {
@@ -41,7 +46,7 @@ var Store = _.assign({}, EventEmitter2.prototype, {
   },
 });
 
-fetchPlants = function(cb) {
+function fetchPlants(cb) {
   LibAPI.fetchPlants(function(err, plants) {
     if (err != null) { return cb(err); }
     data = data.set('plants', Immutable.fromJS(plants));
@@ -49,7 +54,7 @@ fetchPlants = function(cb) {
   });
 };
 
-function fetchSchedule(cb) {
+function fetchSchedule() {
   var climate = data.get('climate');
   var types = data.get('types');
   var month = data.get('month');
@@ -57,45 +62,31 @@ function fetchSchedule(cb) {
   LibAPI.fetchSchedule(climate, types, month, function(err, schedule) {
     if (err != null) { return cb(err); }
     data = data.set('schedule', Immutable.fromJS(schedule));
-    cb();
+    Store.emitChange();
   });
 };
 
 AppDispatcher.register((action) => {
-  console.log(action);
-
   switch (action.actionType) {
     case constants.FETCH_DATA:
       fetchPlants(function(err) {
         if (err != null) { return console.error(err); }
-        fetchSchedule(function(err) {
-          if (err != null) { return console.error(err); }
-          Store.emitChange();
-        });
+        fetchSchedule();
       });
       break;
     case constants.SET_CLIMATE:
       data = data.set('climate', action.climate);
       Cookies.set('climate', action.climate);
-      fetchSchedule(function(err) {
-        if (err != null) { return console.error(err); }
-        Store.emitChange();
-      });
+      fetchSchedule();
       break;
     case constants.SET_TYPES:
       data = data.set('types', Immutable.fromJS(action.types));
       Cookies.set('types', JSON.stringify(action.types));
-      fetchSchedule(function(err) {
-        if (err != null) { return console.error(err); }
-        Store.emitChange();
-      });
+      fetchSchedule();
       break;
     case constants.SET_MONTH:
       data = data.set('month', action.month);
-      fetchSchedule(function(err) {
-        if (err != null) { return console.error(err); }
-        Store.emitChange();
-      });
+      fetchSchedule();
       break;
     default:
   }
