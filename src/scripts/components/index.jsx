@@ -50,7 +50,7 @@ var Index = React.createClass({
     return function(e) {
       e.preventDefault();
 
-      var types = this.state.data.get('types');
+      var types = this.state.data.get('types').toJS();
       var pos = types.indexOf(type);
 
       if (pos === -1) {
