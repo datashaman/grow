@@ -24,7 +24,6 @@ var generateSql = function(climate, types, month) {
   columns = ['Name', month, 'Type'];
   sql = 'select ' + columns.join(', ') + ' FROM ' + config.getIn([ 'services', 'google', 'tables', 'schedule']) +
     ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name';
-  console.log(sql);
   return [sql, columns];
 };
 
