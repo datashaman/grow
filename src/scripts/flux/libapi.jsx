@@ -1,15 +1,16 @@
 'use strict';
 
+var Immutable = require('immutable');
 var _ = require('lodash');
 var request = require('superagent');
 
 var config = require('../config.jsx')();
 
 var generateSql = function(climate, types, month) {
-  var columns, filters = [];
+  var sql, columns, filters = new Immutable.List();
 
   if (types.size === 0) {
-    filters = ['1 = 0'];
+    filters = filters.push('1 = 0');
   } else if (types.size === config.get('types').size) {
   } else {
     filters = types.map(function(type) {
@@ -17,12 +18,14 @@ var generateSql = function(climate, types, month) {
     });
   }
 
-  filters.push('Climate = \'' + climate + '\'');
-  filters.push(month + ' NOT EQUAL TO \'\'');
+  filters = filters.push('Climate = \'' + climate + '\'');
+  filters = filters.push(month + ' NOT EQUAL TO \'\'');
 
   columns = ['Name', month, 'Type'];
-  return ['select ' + columns.join(', ') + ' FROM ' + config.getIn([ 'services', 'google', 'tables', 'schedule']) +
-    ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name', columns];
+  sql = 'select ' + columns.join(', ') + ' FROM ' + config.getIn([ 'services', 'google', 'tables', 'schedule']) +
+    ' WHERE ' + filters.join(' AND ') + ' ORDER BY Name';
+  console.log(sql);
+  return [sql, columns];
 };
 
 var responseHandler = function(columns, cb) {
