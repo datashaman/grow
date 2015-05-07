@@ -52,6 +52,7 @@ var LibAPI = {
     var columns, ref, sql;
     ref = generateSql(climate, types, month), sql = ref[0], columns = ref[1];
     return request.get('https://www.googleapis.com/fusiontables/v1/query')
+      .set({ Referer: 'http://localhost:3000' })
       .query({ sql: sql })
       .query({ key: config.getIn(['services','google','apiKey']) })
       .end(responseHandler(columns, cb));
@@ -61,6 +62,7 @@ var LibAPI = {
     var columns;
     columns = ['Name', 'Wikipedia', 'Image', 'ImageSource'];
     return request.get('https://www.googleapis.com/fusiontables/v1/query')
+      .set({ Referer: 'http://localhost:3000' })
       .query({ sql: 'select ' + columns.join(', ') + ' FROM ' + config.getIn(['services','google','tables','plants']) + ' ORDER BY Name' })
       .query({ key: config.getIn(['services','google','apiKey']) })
       .end(responseHandler(columns, cb));

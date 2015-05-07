@@ -134,6 +134,21 @@ gulp.task('less', function() {
     }));
 });
 
+gulp.task('reprocess-images', function() {
+  return gulp.src('original/images/plants/*')
+    .pipe(plugins.imageResize({
+      width: 120,
+      height: 120,
+      upscale: false,
+      crop: true,
+      gravity: 'Center',
+      format: 'png',
+      filter: 'Catrom',
+      sharpen: true
+    }))
+    .pipe(gulp.dest('src/images/plants'));
+});
+
 gulp.task('original-images', function() {
   return LibAPI.fetchPlants(function(err, plants) {
     if (err != null) {
